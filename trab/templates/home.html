@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Home</h1>
+    {% for produto in produtos %}
+        <h3>{{ produto.nome }}</h3>
+        <h3>{{ produto.preco }}</h3>
+    {% endfor %}
+{% endblock content %}
