@@ -1,8 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Home</h1>
-    {% for produto in produtos %}
-        <h3>{{ produto.nome }}</h3>
-        <h3>{{ produto.preco }}</h3>
-    {% endfor %}
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Produtos</h1>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for produto in produtos %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">{{ produto.nome }}</h5>
+                    <p class="card-text text-muted">Preço: R$ {{ produto.preco }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %}
