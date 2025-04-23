@@ -1,8 +1,14 @@
-from flask import Flask, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, url_for, redirect, request
+from forms import ProdutoForm
+from models import db, Produto
+
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SECRET_KEY'] = 'minha_chave_super_secreta'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:laboratorio@localhost/sistemadb'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
 
 produtos = [
     {
@@ -24,34 +30,24 @@ def home():
 def about():
     return render_template('about.html', titulo="Teste")
 
+@app.route('/cadastrar_produto', methods=['GET', 'POST'])
+def cadastrar_produto():
+    form = ProdutoForm()
+    if form.validate_on_submit():
+        produto = Produto(
+            nome=form.nome.data,
+            preco_compra=form.preco_compra.data,
+            preco_venda=form.preco_venda.data,
+            icms_credito=form.icms_credito.data,
+            icms_debito=form.icms_debito.data,
+        )
+        db.session.add(produto)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('cadastrar_produto.html', form=form)
+
 if (__name__) == '__main__':
     app.run(debug=True)
 
-
-'''
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from routes import main
-import os
-
-# Inicialização da aplicação
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'chave-secreta'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sistema.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Inicialização de extensões
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-# Registro das rotas
-app.register_blueprint(main)
-
-# Importa os modelos para que o Migrate funcione corretamente
-from models import Produto, Cliente, Fornecedor
-
-# Execução
-if __name__ == '__main__':
-    app.run(debug=True)
-'''
+with app.app_context():
+    db.create_all()

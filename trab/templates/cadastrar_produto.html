@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Cadastrar Produto</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.nome.label(class="form-label") }}
+                {{ form.nome(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.preco_compra.label(class="form-label") }}
+                {{ form.preco_compra(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.preco_venda.label(class="form-label") }}
+                {{ form.preco_venda(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.icms_credito.label(class="form-label") }}
+                {{ form.icms_credito(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.icms_debito.label(class="form-label") }}
+                {{ form.icms_debito(class="form-control") }}
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
