@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Produtos</h1>
+
+    <div class="d-flex justify-content-center mb-4">
+        <a href="{{ url_for('cadastrar_produto') }}" class="btn btn-info btn-lg">
+            <i class="bi bi-plus-circle"></i> Cadastrar Novo Produto
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle shadow-sm">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th>Nome</th>
+                    <th>Preço de Compra</th>
+                    <th>Preço de Venda</th>
+                    <th>ICMS Crédito (%)</th>
+                    <th>ICMS Débito (%)</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produto in produtos %}
+                <tr>
+                    <td>{{ produto.nome }}</td>
+                    <td>R$ {{ produto.preco_compra }}</td>
+                    <td>R$ {{ produto.preco_venda }}</td>
+                    <td>{{ produto.icms_credito }}</td>
+                    <td>{{ produto.icms_debito }}</td>
+                    <td class="text-center">
+                        <a href="{{ url_for('editar_produto', produto_id=produto.id) }}" class="btn btn-sm btn-warning me-2">Editar</a>
+                        <form action="{{ url_for('excluir_produto', produto_id=produto.id) }}" method="post" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

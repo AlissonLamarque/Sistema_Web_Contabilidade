@@ -24,16 +24,19 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/cadastro-produto">Produtos</a>
+                        <a class="nav-link" href={{url_for('produtos')}}>Produtos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/cadastro-pessoa">Clientes/Fornecedores</a>
+                        <a class="nav-link" href={{url_for('listar_clientes')}}>Clientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/compras">Compras</a>
+                        <a class="nav-link" href={{url_for('produtos')}}>Fornecedores</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/vendas">Vendas</a>
+                        <a class="nav-link" href={{url_for('produtos')}}>Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{url_for('produtos')}}>Vendas</a>
                     </li>
                 </ul>
             </div>
@@ -41,6 +44,18 @@
     </nav>
 
     <main class="container my-5 flex-grow-1">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mb-4">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </main>
 

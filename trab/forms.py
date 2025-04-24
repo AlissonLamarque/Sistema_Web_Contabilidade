@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Email, Length
 
 class ProdutoForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
@@ -9,3 +9,10 @@ class ProdutoForm(FlaskForm):
     icms_credito = FloatField('ICMS Crédito')
     icms_debito = FloatField('ICMS Débito')
     submit = SubmitField('Cadastrar Produto')
+
+class ClienteForm(FlaskForm):
+    nome = StringField('Nome', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    cpf = StringField('CPF', validators=[DataRequired()])
+    telefone = StringField('Telefone')
+    endereco = StringField('Endereço')
