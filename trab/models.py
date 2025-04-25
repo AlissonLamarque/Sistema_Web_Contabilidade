@@ -15,8 +15,13 @@ class Cliente(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     cpf = db.Column(db.String(14), nullable=False, unique=True)
-    telefone = db.Column(db.String(20), nullable=True)
-    endereco = db.Column(db.String(200), nullable=True)
+    cidade = db.Column(db.String(20), nullable=True)
+    estado = db.Column(db.String(200), nullable=True)
 
-    def __repr__(self):
-        return f'<Cliente {self.nome}>'
+class Fornecedor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    cnpj = db.Column(db.String(18), nullable=False, unique=True)
+    cidade = db.Column(db.String(100), nullable=True)
+    estado = db.Column(db.String(2), nullable=True)

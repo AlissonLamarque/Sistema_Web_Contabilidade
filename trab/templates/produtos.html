@@ -5,7 +5,7 @@
 
     <div class="d-flex justify-content-center mb-4">
         <a href="{{ url_for('cadastrar_produto') }}" class="btn btn-info btn-lg">
-            <i class="bi bi-plus-circle"></i> Cadastrar Novo Produto
+            Cadastrar Novo Produto
         </a>
     </div>
 
@@ -23,15 +23,15 @@
             </thead>
             <tbody>
                 {% for produto in produtos %}
-                <tr>
+                <tr class="text-center">
                     <td>{{ produto.nome }}</td>
                     <td>R$ {{ produto.preco_compra }}</td>
                     <td>R$ {{ produto.preco_venda }}</td>
                     <td>{{ produto.icms_credito }}</td>
                     <td>{{ produto.icms_debito }}</td>
-                    <td class="text-center">
-                        <a href="{{ url_for('editar_produto', produto_id=produto.id) }}" class="btn btn-sm btn-warning me-2">Editar</a>
-                        <form action="{{ url_for('excluir_produto', produto_id=produto.id) }}" method="post" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                    <td>
+                        <a href="{{ url_for('editar_produto', produto_id=produto.id) }}" class="btn btn-sm btn-primary me-2">Editar</a>
+                        <form action="{{ url_for('excluir_produto', produto_id=produto.id) }}" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                         </form>
                     </td>

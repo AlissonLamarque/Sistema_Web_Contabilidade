@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container my-5">
-    <h1 class="mb-4 text-center">Clientes</h1>
+    <h1 class="mb-4 text-center">Fornecedores</h1>
 
     <div class="d-flex justify-content-center mb-4">
-        <a href="{{ url_for('cadastrar_cliente') }}" class="btn btn-info btn-lg">
-            Cadastrar Novo Cliente
+        <a href="{{ url_for('cadastrar_fornecedor') }}" class="btn btn-info btn-lg">
+            Cadastrar Novo Fornecedor
         </a>
     </div>
 
@@ -15,23 +15,22 @@
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
-                    <th>CPF</th>
+                    <th>CNPJ</th>
                     <th>Cidade</th>
                     <th>Estado</th>
-                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                {% for cliente in clientes %}
+                {% for fornecedor in fornecedores %}
                 <tr class="text-center">
-                    <td>{{ cliente.nome }}</td>
-                    <td>{{ cliente.email }}</td>
-                    <td>{{ cliente.cpf }}</td>
-                    <td>{{ cliente.cidade }}</td>
-                    <td>{{ cliente.estado }}</td>
+                    <td>{{ fornecedor.nome }}</td>
+                    <td>{{ fornecedor.email }}</td>
+                    <td>{{ fornecedor.cnpj }}</td>
+                    <td>{{ fornecedor.cidade }}</td>
+                    <td>{{ fornecedor.estado }}</td>
                     <td>
-                        <a href="{{ url_for('editar_cliente', cliente_id=cliente.id) }}" class="btn btn-sm btn-primary me-2">Editar</a>
-                        <form action="{{ url_for('excluir_cliente', cliente_id=cliente.id) }}" method="POST" class="d-inline">
+                        <a href="{{ url_for('editar_fornecedor', fornecedor_id=fornecedor.id) }}" class="btn btn-sm btn-primary me-2">Editar</a>
+                        <form action="{{ url_for('excluir_fornecedor', fornecedor_id=fornecedor.id) }}" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                         </form>
                     </td>
@@ -41,4 +40,4 @@
         </table>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

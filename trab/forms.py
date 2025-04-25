@@ -14,5 +14,12 @@ class ClienteForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     cpf = StringField('CPF', validators=[DataRequired()])
-    telefone = StringField('Telefone')
-    endereco = StringField('Endereço')
+    cidade = StringField('Cidade')
+    estado = StringField('Estado')
+
+class FornecedorForm(FlaskForm):
+    nome = StringField('Nome', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    cnpj = StringField('CNPJ', validators=[DataRequired()])
+    cidade = StringField('Cidade')
+    estado = StringField('Estado')
