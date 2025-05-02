@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, SubmitField
-from wtforms.validators import DataRequired, Email, NumberRange
+from wtforms.validators import DataRequired, NumberRange
 
 class ProdutoForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
     preco_compra = FloatField('Preço de Compra', validators=[DataRequired()])
     preco_venda = FloatField('Preço de Venda', validators=[DataRequired()])
+    status = StringField('Status', validators=[DataRequired()])
     submit = SubmitField('Cadastrar Produto')
 
 class ClienteForm(FlaskForm):
@@ -13,23 +14,27 @@ class ClienteForm(FlaskForm):
     cpf = StringField('CPF', validators=[DataRequired()])
     cidade = StringField('Cidade')
     estado = StringField('Estado')
+    status = StringField('Status', validators=[DataRequired()])
 
 class FornecedorForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
     cnpj = StringField('CNPJ', validators=[DataRequired()])
     cidade = StringField('Cidade')
     estado = StringField('Estado')
+    status = StringField('Status', validators=[DataRequired()])
 
 class CompraForm(FlaskForm):
     fornecedor_id = StringField('Fornecedor ID', validators=[DataRequired()])
     nf_entrada = StringField('NF Entrada', validators=[DataRequired()])
     data_compra = StringField('Data da Compra', validators=[DataRequired()])
+    status = StringField('Status', validators=[DataRequired()])
     submit = SubmitField('Cadastrar Compra')
 
 class VendaForm(FlaskForm):
     cliente_id = StringField('Cliente ID', validators=[DataRequired()])
     forma_pagamento = StringField('Forma de Pagamento', validators=[DataRequired()])
     data_venda = StringField('Data da Venda', validators=[DataRequired()])
+    status = StringField('Status', validators=[DataRequired()])
     submit = SubmitField('Cadastrar Venda')
 
 class ItemCompraForm(FlaskForm):

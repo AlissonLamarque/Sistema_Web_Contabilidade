@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, flash, request
-from forms import ProdutoForm, ClienteForm, FornecedorForm, CompraForm, VendaForm, ItemCompraForm, ItemVendaForm
+from forms import ProdutoForm, ClienteForm, FornecedorForm, CompraForm, VendaForm
 from models import db, Produto, Cliente, Fornecedor, Compra, Item_compra, Venda, Item_venda
 
 def init_app(app):
@@ -19,9 +19,10 @@ def init_app(app):
         form = ProdutoForm()
         if form.validate_on_submit():
             produto = Produto(
-                nome=form.nome.data,
-                preco_compra=form.preco_compra.data,
-                preco_venda=form.preco_venda.data,
+                nome = form.nome.data,
+                preco_compra = form.preco_compra.data,
+                preco_venda = form.preco_venda.data,
+                status = form.status.data
             )
             db.session.add(produto)
             db.session.commit()
@@ -37,6 +38,7 @@ def init_app(app):
             produto.nome = form.nome.data
             produto.preco_compra = form.preco_compra.data
             produto.preco_venda = form.preco_venda.data
+            produto.status = form.status.data
             db.session.commit()
             flash('Produto atualizado com sucesso!', 'success')
             return redirect(url_for('produtos'))
@@ -62,10 +64,11 @@ def init_app(app):
         form = ClienteForm()
         if form.validate_on_submit():
             cliente = Cliente(
-                nome=form.nome.data,
-                cpf=form.cpf.data,
-                cidade=form.cidade.data,
-                estado=form.estado.data
+                nome = form.nome.data,
+                cpf = form.cpf.data,
+                cidade = form.cidade.data,
+                estado = form.estado.data,
+                status = form.status.data
             )
             db.session.add(cliente)
             db.session.commit()
@@ -82,6 +85,7 @@ def init_app(app):
             cliente.cpf = form.cpf.data
             cliente.cidade = form.cidade.data
             cliente.estado = form.estado.data
+            cliente.status = form.status.data
             db.session.commit()
             flash('Cliente atualizado com sucesso!', 'success')
             return redirect(url_for('clientes'))
@@ -107,10 +111,11 @@ def init_app(app):
         form = FornecedorForm()
         if form.validate_on_submit():
             fornecedor = Fornecedor(
-                nome=form.nome.data,
-                cnpj=form.cnpj.data,
-                cidade=form.cidade.data,
-                estado=form.estado.data
+                nome = form.nome.data,
+                cnpj = form.cnpj.data,
+                cidade = form.cidade.data,
+                estado = form.estado.data,
+                status = form.status.data
             )
             db.session.add(fornecedor)
             db.session.commit()
@@ -127,6 +132,7 @@ def init_app(app):
             fornecedor.cnpj = form.cnpj.data
             fornecedor.cidade = form.cidade.data
             fornecedor.estado = form.estado.data
+            fornecedor.status = form.status.data
             db.session.commit()
             flash('Fornecedor atualizado com sucesso!', 'success')
             return redirect(url_for('fornecedores'))
@@ -158,10 +164,11 @@ def init_app(app):
         if form.validate_on_submit():
             try:
                 nova_compra = Compra(
-                    fornecedor_id=form.fornecedor_id.data,
-                    nf_entrada=form.nf_entrada.data,
-                    data_compra=form.data_compra.data,
-                    valor_total=0 
+                    fornecedor_id = form.fornecedor_id.data,
+                    nf_entrada = form.nf_entrada.data,
+                    data_compra = form.data_compra.data,
+                    status = form.status.data,
+                    valor_total = 0 
                 )
                 db.session.add(nova_compra)
                 db.session.flush()
@@ -176,10 +183,10 @@ def init_app(app):
                         continue
                         
                     item = Item_compra(
-                        compra_id=nova_compra.id,
-                        produto_id=produto_id,
-                        quantidade=float(quantidade),
-                        preco_unitario=float(preco_unitario)
+                        compra_id = nova_compra.id,
+                        produto_id = produto_id,
+                        quantidade = float(quantidade),
+                        preco_unitario = float(preco_unitario)
                     )
                     db.session.add(item)
                     
@@ -215,10 +222,11 @@ def init_app(app):
         if form.validate_on_submit():
             try:
                 nova_venda = Venda(
-                    cliente_id=form.cliente_id.data,
-                    forma_pagamento=form.forma_pagamento.data,
-                    data_venda=form.data_venda.data,
-                    valor_total=0
+                    cliente_id = form.cliente_id.data,
+                    forma_pagamento = form.forma_pagamento.data,
+                    data_venda = form.data_venda.data,
+                    status = form.status.data,
+                    valor_total = 0
                 )
                 db.session.add(nova_venda)
                 db.session.flush()

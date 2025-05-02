@@ -8,6 +8,7 @@ class Produto(db.Model):
     preco_compra = db.Column(db.Float, nullable=False)
     preco_venda = db.Column(db.Float, nullable=False)
     estoque = db.Column(db.Integer, nullable=False, default=0)
+    status = db.Column(db.String(20), nullable=False, default='disponível')
 
     compras = db.relationship('Item_compra', backref='produto', lazy=True)
     vendas = db.relationship('Item_venda', backref='produto', lazy=True)
@@ -18,6 +19,7 @@ class Cliente(db.Model):
     cpf = db.Column(db.String(14), nullable=False, unique=True)
     cidade = db.Column(db.String(20), nullable=True)
     estado = db.Column(db.String(200), nullable=True)
+    status = db.Column(db.String(10), nullable=False, default='ativo')
 
     vendas = db.relationship('Venda', backref='cliente', lazy=True)
 
@@ -27,6 +29,7 @@ class Fornecedor(db.Model):
     cnpj = db.Column(db.String(18), nullable=False, unique=True)
     cidade = db.Column(db.String(100), nullable=True)
     estado = db.Column(db.String(2), nullable=True)
+    status = db.Column(db.String(10), nullable=False, default='ativo')
 
     compras = db.relationship('Compra', backref='fornecedor', lazy=True)
 
@@ -36,6 +39,7 @@ class Compra(db.Model):
     nf_entrada = db.Column(db.String(50), nullable=False)
     data_compra = db.Column(db.DateTime, nullable=False)
     valor_total = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), default='confirmada')
 
     itens = db.relationship('Item_compra', backref='compra', lazy=True)
 
@@ -52,6 +56,7 @@ class Venda(db.Model):
     forma_pagamento = db.Column(db.String(50), nullable=False)
     data_venda = db.Column(db.DateTime, nullable=False)
     valor_total = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), default='confirmada')
 
     itens = db.relationship('Item_venda', backref='venda', lazy=True)
 
