@@ -1,20 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container my-5">
-    <h1 class="mb-4 text-center">Fornecedores</h1>
-
-    <div class="d-flex justify-content-center mb-4">
-        <a href="{{ url_for('cadastrar_fornecedor') }}" class="btn btn-info btn-lg">
-            Cadastrar Novo Fornecedor
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Fornecedores</h2>
+        <a href="{{ url_for('cadastrar_fornecedor') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Novo Fornecedor
         </a>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive text-center">
         <table class="table table-bordered table-hover align-middle shadow-sm">
-            <thead class="table-primary text-center">
+            <thead class="table-primary">
                 <tr>
                     <th>Nome</th>
-                    <th>Email</th>
                     <th>CNPJ</th>
                     <th>Cidade</th>
                     <th>Estado</th>
@@ -25,7 +23,6 @@
                 {% for fornecedor in fornecedores %}
                 <tr class="text-center">
                     <td>{{ fornecedor.nome }}</td>
-                    <td>{{ fornecedor.email }}</td>
                     <td>{{ fornecedor.cnpj }}</td>
                     <td>{{ fornecedor.cidade }}</td>
                     <td>{{ fornecedor.estado }}</td>

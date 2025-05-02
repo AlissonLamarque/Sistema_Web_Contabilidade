@@ -6,6 +6,9 @@ def init_app(app):
     # PRODUTOS
 
     @app.route("/")
+    def index():
+        return render_template('index.html')
+
     @app.route("/produtos")
     def produtos():
         produtos = Produto.query.all()
@@ -19,8 +22,6 @@ def init_app(app):
                 nome=form.nome.data,
                 preco_compra=form.preco_compra.data,
                 preco_venda=form.preco_venda.data,
-                icms_credito=form.icms_credito.data,
-                icms_debito=form.icms_debito.data,
             )
             db.session.add(produto)
             db.session.commit()
@@ -36,8 +37,6 @@ def init_app(app):
             produto.nome = form.nome.data
             produto.preco_compra = form.preco_compra.data
             produto.preco_venda = form.preco_venda.data
-            produto.icms_credito = form.icms_credito.data
-            produto.icms_debito = form.icms_debito.data
             db.session.commit()
             flash('Produto atualizado com sucesso!', 'success')
             return redirect(url_for('produtos'))
@@ -64,7 +63,6 @@ def init_app(app):
         if form.validate_on_submit():
             cliente = Cliente(
                 nome=form.nome.data,
-                email=form.email.data,
                 cpf=form.cpf.data,
                 cidade=form.cidade.data,
                 estado=form.estado.data
@@ -81,7 +79,6 @@ def init_app(app):
         form = ClienteForm(obj=cliente)
         if form.validate_on_submit():
             cliente.nome = form.nome.data
-            cliente.email = form.email.data
             cliente.cpf = form.cpf.data
             cliente.cidade = form.cidade.data
             cliente.estado = form.estado.data
@@ -111,7 +108,6 @@ def init_app(app):
         if form.validate_on_submit():
             fornecedor = Fornecedor(
                 nome=form.nome.data,
-                email=form.email.data,
                 cnpj=form.cnpj.data,
                 cidade=form.cidade.data,
                 estado=form.estado.data
@@ -128,7 +124,6 @@ def init_app(app):
         form = FornecedorForm(obj=fornecedor)
         if form.validate_on_submit():
             fornecedor.nome = form.nome.data
-            fornecedor.email = form.email.data
             fornecedor.cnpj = form.cnpj.data
             fornecedor.cidade = form.cidade.data
             fornecedor.estado = form.estado.data
@@ -158,22 +153,19 @@ def init_app(app):
         fornecedores = Fornecedor.query.all()
         produtos = Produto.query.all()
         
-        # Preencher choices do select
         form.fornecedor_id.choices = [(f.id, f.nome) for f in fornecedores]
         
         if form.validate_on_submit():
             try:
-                # Criar a compra
                 nova_compra = Compra(
                     fornecedor_id=form.fornecedor_id.data,
                     nf_entrada=form.nf_entrada.data,
                     data_compra=form.data_compra.data,
-                    valor_total=0  # Será calculado
+                    valor_total=0 
                 )
                 db.session.add(nova_compra)
-                db.session.flush()  # Para obter o ID
+                db.session.flush()
                 
-                # Processar itens da compra
                 valor_total = 0
                 produtos_ids = request.form.getlist('produto_id')
                 quantidades = request.form.getlist('quantidade')
@@ -183,7 +175,6 @@ def init_app(app):
                     if not produto_id or not quantidade or not preco_unitario:
                         continue
                         
-                    # Criar item de compra
                     item = Item_compra(
                         compra_id=nova_compra.id,
                         produto_id=produto_id,
@@ -192,10 +183,8 @@ def init_app(app):
                     )
                     db.session.add(item)
                     
-                    # Calcular valor total
                     valor_total += float(quantidade) * float(preco_unitario)
                 
-                # Atualizar valor total da compra
                 nova_compra.valor_total = valor_total
                 db.session.commit()
                 
@@ -206,10 +195,7 @@ def init_app(app):
                 db.session.rollback()
                 flash(f'Erro ao registrar compra: {str(e)}', 'danger')
         
-        return render_template('compra/cadastrar_compra.html', 
-                            form=form, 
-                            fornecedores=fornecedores, 
-                            produtos=produtos)
+        return render_template('compra/cadastrar_compra.html', form=form, fornecedores=fornecedores, produtos=produtos)
 
     # VENDAS
 
@@ -224,22 +210,19 @@ def init_app(app):
         clientes = Cliente.query.all()
         produtos = Produto.query.all()
         
-        # Preencher choices dos selects
         form.cliente_id.choices = [(c.id, c.nome) for c in clientes]
         
         if form.validate_on_submit():
             try:
-                # Criar a venda
                 nova_venda = Venda(
                     cliente_id=form.cliente_id.data,
                     forma_pagamento=form.forma_pagamento.data,
                     data_venda=form.data_venda.data,
-                    valor_total=0  # Será calculado
+                    valor_total=0
                 )
                 db.session.add(nova_venda)
-                db.session.flush()  # Para obter o ID
+                db.session.flush()
                 
-                # Processar itens da venda
                 valor_total = 0
                 produtos_ids = request.form.getlist('produto_id')
                 quantidades = request.form.getlist('quantidade')
@@ -252,7 +235,6 @@ def init_app(app):
                     quantidade = float(quantidade)
                     preco_unitario = float(preco_unitario)
                     
-                    # Criar item de venda
                     item = Item_venda(
                         venda_id=nova_venda.id,
                         produto_id=produto_id,
@@ -261,10 +243,8 @@ def init_app(app):
                     )
                     db.session.add(item)
                     
-                    # Calcular valor total
                     valor_total += quantidade * preco_unitario
                 
-                # Atualizar valor total da venda
                 nova_venda.valor_total = valor_total
                 db.session.commit()
                 
@@ -275,7 +255,4 @@ def init_app(app):
                 db.session.rollback()
                 flash(f'Erro ao registrar venda: {str(e)}', 'danger')
         
-        return render_template('venda/cadastrar_venda.html', 
-                            form=form, 
-                            clientes=clientes, 
-                            produtos=produtos)
+        return render_template('venda/cadastrar_venda.html', form=form, clientes=clientes, produtos=produtos)

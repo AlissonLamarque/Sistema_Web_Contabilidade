@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">{{ titulo or 'Registrar Nova Venda' }}</h2>
+    <h2 class="mb-4 text-center">{{ titulo or 'Registro de Venda' }}</h2>
     <form method="POST">
         {{ form.hidden_tag() }}
         <div class="row mb-3">
@@ -32,7 +32,7 @@
 
         <h4 class="mt-4 mb-3">Itens da Venda</h4>
         <div id="itens-container">
-            <!-- Itens serão adicionados dinamicamente aqui -->
+            
         </div>
         <button type="button" class="btn btn-outline-primary mt-2" id="adicionar-item">
             <i class="bi bi-plus-circle"></i> Adicionar Item
@@ -43,7 +43,7 @@
                 <h5>Total: <span id="total-venda">R$ 0,00</span></h5>
                 <div>
                     <a href="{{ url_for('vendas') }}" class="btn btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-success">Registrar Venda</button>
+                    <button type="submit" class="btn btn-success">Registrar</button>
                 </div>
             </div>
         </div>
@@ -82,8 +82,8 @@ document.getElementById('adicionar-item').addEventListener('click', function() {
                        min="0.01" step="0.01" required>
             </div>
             <div class="col-md-1 d-flex align-items-end">
-                <button type="button" class="btn btn-outline-danger remover-item">
-                    <i class="bi bi-trash"></i>
+                <button type="button" class="btn btn-outline-danger">
+                    <i class="bi bi-trash">Remover</i>
                 </button>
             </div>
         </div>
@@ -91,13 +91,11 @@ document.getElementById('adicionar-item').addEventListener('click', function() {
     
     container.appendChild(itemDiv);
     
-    // Adiciona evento para remover item
     itemDiv.querySelector('.remover-item').addEventListener('click', function() {
         container.removeChild(itemDiv);
         calcularTotal();
     });
     
-    // Atualiza preço quando seleciona produto
     itemDiv.querySelector('.produto-select').addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
         const preco = selectedOption.getAttribute('data-preco');
@@ -109,7 +107,6 @@ document.getElementById('adicionar-item').addEventListener('click', function() {
         calcularTotal();
     });
     
-    // Atualiza total quando muda quantidade ou preço
     itemDiv.querySelector('.quantidade').addEventListener('input', calcularTotal);
     itemDiv.querySelector('.preco-unitario').addEventListener('input', calcularTotal);
 });
