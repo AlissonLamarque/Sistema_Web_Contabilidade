@@ -8,32 +8,62 @@
         </a>
     </div>
 
-    <div class="table-responsive text-center">
-        <table class="table table-bordered table-hover align-middle shadow-sm">
-            <thead class="table-primary">
-                <tr>
-                    <th>Data</th>
-                    <th>Fornecedor</th>
-                    <th>Nota Fiscal</th>
-                    <th>Valor Total</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for compra in compras %}
-                <tr>
-                    <td>{{ compra.data_compra.strftime('%d/%m/%Y') }}</td>
-                    <td>{{ compra.fornecedor.nome }}</td>
-                    <td>{{ compra.nf_entrada }}</td>
-                    <td>R$ {{ "%.2f"|format(compra.valor_total) }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6" class="text-center">Nenhuma compra registrada</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for compra in compras %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">{{ compra.data_compra.strftime('%d/%m/%Y') }}</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-calendar me-2"></i>Nota Fiscal</span>
+                            <span class="fw-bold">{{ compra.nf_entrada }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-building me-2"></i>Fornecedor</span>
+                            <span class="fw-bold">{{ compra.fornecedor.nome }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-currency-dollar me-2"></i>Valor Total</span>
+                            <span class="fw-bold text-success">R$ {{ "%.2f"|format(compra.valor_total) }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end">
+                        <a href="#" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="bi bi-eye"></i> Detalhes
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i> Excluir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle-fill me-2"></i>Nenhuma compra registrada
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .list-group-item {
+        border-left: 0;
+        border-right: 0;
+    }
+</style>
 {% endblock %}

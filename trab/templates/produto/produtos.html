@@ -8,32 +8,74 @@
         </a>
     </div>
 
-    <div class="table-responsive text-center">
-        <table class="table table-bordered table-hover align-middle shadow-sm">
-            <thead class="table-primary">
-                <tr>
-                    <th>Nome</th>
-                    <th>Preço de Compra</th>
-                    <th>Preço de Venda</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for produto in produtos %}
-                <tr class="text-center">
-                    <td>{{ produto.nome }}</td>
-                    <td>R$ {{ produto.preco_compra }}</td>
-                    <td>R$ {{ produto.preco_venda }}</td>
-                    <td>
-                        <a href="{{ url_for('editar_produto', produto_id=produto.id) }}" class="btn btn-sm btn-primary me-2">Editar</a>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for produto in produtos %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-box-seam me-2"></i>
+                        {{ produto.nome }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-arrow-down-circle me-2"></i>Preço de Compra</span>
+                            <span class="fw-bold text-danger">R$ {{ "%.2f"|format(produto.preco_compra) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-arrow-up-circle me-2"></i>Preço de Venda</span>
+                            <span class="fw-bold text-success">R$ {{ "%.2f"|format(produto.preco_venda) }}</span>
+                        </li>
+                        {% if produto.estoque %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-percent me-2"></i>Estoque</span>
+                            <span class="fw-bold">{{ produto.estoque }}%</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('editar_produto', produto_id=produto.id) }}" 
+                           class="btn btn-sm btn-outline-primary me-2">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
                         <form action="{{ url_for('excluir_produto', produto_id=produto.id) }}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Excluir
+                            </button>
                         </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle-fill me-2"></i>Nenhum produto cadastrado
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+        border-left: 4px solid var(--bs-primary);
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .list-group-item {
+        border-left: 0;
+        border-right: 0;
+    }
+    .card-header {
+        border-bottom: 2px solid rgba(0,0,0,0.1);
+    }
+</style>
 {% endblock content %}
