@@ -32,7 +32,7 @@ class FornecedorForm(FlaskForm):
     submit = SubmitField('Cadastrar Produto')
 
 class CompraForm(FlaskForm):
-    fornecedor_id = StringField('Fornecedor ID', validators=[DataRequired()])
+    fornecedor_id = SelectField('Fornecedor', coerce=int, validators=[DataRequired()], choices=[])
     nf_entrada = StringField('NF Entrada', validators=[DataRequired()])
     data_compra = StringField('Data da Compra', validators=[DataRequired()])
     status = SelectField('Status', 
@@ -41,8 +41,10 @@ class CompraForm(FlaskForm):
     submit = SubmitField('Cadastrar Compra')
 
 class VendaForm(FlaskForm):
-    cliente_id = StringField('Cliente ID', validators=[DataRequired()])
-    forma_pagamento = StringField('Forma de Pagamento', validators=[DataRequired()])
+    cliente_id = SelectField('Fornecedor', coerce=int, validators=[DataRequired()], choices=[])
+    forma_pagamento = SelectField('Forma de Pagamento',
+                                choices=[('vista', 'À Vista'), ('prazo', 'A Prazo')],
+                                validators=[DataRequired()])
     data_venda = StringField('Data da Venda', validators=[DataRequired()])
     status = SelectField('Status', 
                        choices=[('confirmada', 'Confirmada'), ('cancelada', 'Cancelada')],

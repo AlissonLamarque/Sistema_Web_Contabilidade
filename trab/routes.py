@@ -132,52 +132,65 @@ def init_app(app):
     @app.route('/cadastrar_compra', methods=['GET', 'POST'])
     def cadastrar_compra():
         form = CompraForm()
-        fornecedores = Fornecedor.query.all()
+        fornecedores = Fornecedor.query.filter_by(status='ativo').all()
+        form.fornecedor_id.choices = [(f.id, f"{f.nome} - {f.cnpj}") for f in fornecedores]
         produtos = Produto.query.all()
         
-        form.fornecedor_id.choices = [(f.id, f.nome) for f in fornecedores]
-        
-        if form.validate_on_submit():
+        if request.method == 'POST':
             try:
+                if not all([form.fornecedor_id.data, form.nf_entrada.data, form.data_compra.data]):
+                    flash('Preencha todos os campos obrigatórios', 'danger')
+                    return redirect(url_for('cadastrar_compra'))
+
                 nova_compra = Compra(
-                    fornecedor_id = form.fornecedor_id.data,
-                    nf_entrada = form.nf_entrada.data,
-                    data_compra = form.data_compra.data,
-                    status = form.status.data,
-                    valor_total = 0 
+                    fornecedor_id=form.fornecedor_id.data,
+                    nf_entrada=form.nf_entrada.data,
+                    data_compra=form.data_compra.data,
+                    status=form.status.data,
+                    valor_total=0
                 )
                 db.session.add(nova_compra)
                 db.session.flush()
-                
-                valor_total = 0
+
                 produtos_ids = request.form.getlist('produto_id')
                 quantidades = request.form.getlist('quantidade')
                 precos_unitarios = request.form.getlist('preco_unitario')
-                
-                for produto_id, quantidade, preco_unitario in zip(produtos_ids, quantidades, precos_unitarios):
-                    if not produto_id or not quantidade or not preco_unitario:
+
+                if not produtos_ids:
+                    flash('Adicione pelo menos um item', 'danger')
+                    db.session.rollback()
+                    return redirect(url_for('cadastrar_compra'))
+
+                for i in range(len(produtos_ids)):
+                    produto = Produto.query.get(produtos_ids[i])
+                    if not produto:
                         continue
-                        
+
                     item = Item_compra(
-                        compra_id = nova_compra.id,
-                        produto_id = produto_id,
-                        quantidade = float(quantidade),
-                        preco_unitario = float(preco_unitario)
+                        compra_id=nova_compra.id,
+                        produto_id=produtos_ids[i],
+                        quantidade=int(quantidades[i]),
+                        preco_unitario=float(precos_unitarios[i])
                     )
                     db.session.add(item)
                     
-                    valor_total += float(quantidade) * float(preco_unitario)
-                
-                nova_compra.valor_total = valor_total
+                    produto.estoque += int(quantidades[i])
+                    produto.status = 'disponível' if produto.estoque > 0 else 'indisponível'
+                    
+                    nova_compra.valor_total += item.quantidade * item.preco_unitario
+
                 db.session.commit()
-                
                 flash('Compra registrada com sucesso!', 'success')
                 return redirect(url_for('compras'))
-                
+
+            except ValueError as e:
+                db.session.rollback()
+                flash(f'Erro nos valores informados: {str(e)}', 'danger')
             except Exception as e:
                 db.session.rollback()
                 flash(f'Erro ao registrar compra: {str(e)}', 'danger')
-        
+                app.logger.error(f"Erro em cadastrar_compra: {str(e)}", exc_info=True)
+
         return render_template('compra/cadastrar_compra.html', form=form, fornecedores=fornecedores, produtos=produtos)
 
     # VENDAS
@@ -190,19 +203,20 @@ def init_app(app):
     @app.route('/cadastrar_venda', methods=['GET', 'POST'])
     def cadastrar_venda():
         form = VendaForm()
-        clientes = Cliente.query.all()
-        produtos = Produto.query.all()
-        
-        form.cliente_id.choices = [(c.id, c.nome) for c in clientes]
+        form.cliente_id.choices = [(c.id, c.nome) for c in Cliente.query.filter_by(status='ativo').all()]
+        produtos = Produto.query.filter(
+            Produto.status == 'disponível',
+            Produto.estoque > 0
+        ).all()
         
         if form.validate_on_submit():
             try:
                 nova_venda = Venda(
-                    cliente_id = form.cliente_id.data,
-                    forma_pagamento = form.forma_pagamento.data,
-                    data_venda = form.data_venda.data,
-                    status = form.status.data,
-                    valor_total = 0
+                    cliente_id=form.cliente_id.data,
+                    forma_pagamento=form.forma_pagamento.data,
+                    data_venda=form.data_venda.data,
+                    valor_total=0.0,
+                    status=form.status.data
                 )
                 db.session.add(nova_venda)
                 db.session.flush()
@@ -213,12 +227,18 @@ def init_app(app):
                 precos_unitarios = request.form.getlist('preco_unitario')
                 
                 for produto_id, quantidade, preco_unitario in zip(produtos_ids, quantidades, precos_unitarios):
-                    if not produto_id or not quantidade or not preco_unitario:
+                    if not all([produto_id, quantidade, preco_unitario]):
                         continue
-                        
-                    quantidade = float(quantidade)
-                    preco_unitario = float(preco_unitario)
                     
+                    quantidade = int(quantidade)
+                    preco_unitario = float(preco_unitario)
+                    produto = Produto.query.get(produto_id)
+
+                    if produto.estoque < quantidade:
+                        flash(f'Estoque insuficiente para {produto.nome}', 'danger')
+                        db.session.rollback()
+                        return redirect(url_for('cadastrar_venda'))
+
                     item = Item_venda(
                         venda_id=nova_venda.id,
                         produto_id=produto_id,
@@ -226,17 +246,21 @@ def init_app(app):
                         preco_unitario=preco_unitario
                     )
                     db.session.add(item)
-                    
+
+                    produto.estoque -= quantidade
+                    if produto.estoque <= 0:
+                        produto.status = 'indisponível'
+
                     valor_total += quantidade * preco_unitario
-                
+
                 nova_venda.valor_total = valor_total
                 db.session.commit()
-                
                 flash('Venda registrada com sucesso!', 'success')
                 return redirect(url_for('vendas'))
                 
             except Exception as e:
                 db.session.rollback()
                 flash(f'Erro ao registrar venda: {str(e)}', 'danger')
+                app.logger.error(f"Erro em cadastrar_venda: {str(e)}", exc_info=True)
         
-        return render_template('venda/cadastrar_venda.html', form=form, clientes=clientes, produtos=produtos)
+        return render_template('venda/cadastrar_venda.html', form=form, produtos=produtos)

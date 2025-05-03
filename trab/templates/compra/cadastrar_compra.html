@@ -2,27 +2,57 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="mb-4 text-center">{{ titulo or 'Registro de Compra' }}</h2>
-    <form method="POST">
+    
+    {# Exibir mensagens flash #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mb-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" id="form-compra">
         {{ form.hidden_tag() }}
+        
         <div class="row mb-3">
             <div class="col-md-6">
                 {{ form.fornecedor_id.label(class="form-label") }}
-                <select name="fornecedor_id" class="form-select" required>
-                    <option value="">Selecione um fornecedor</option>
-                    {% for fornecedor in fornecedores %}
-                        <option value="{{ fornecedor.id }}">{{ fornecedor.nome }} - {{ fornecedor.cnpj }}</option>
-                    {% endfor %}
-                </select>
+                {{ form.fornecedor_id(class="form-select") }}
+                {% if form.fornecedor_id.errors %}
+                    <div class="invalid-feedback d-block">
+                        {% for error in form.fornecedor_id.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
             <div class="col-md-6">
                 {{ form.nf_entrada.label(class="form-label") }}
                 {{ form.nf_entrada(class="form-control") }}
+                {% if form.nf_entrada.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.nf_entrada.errors[0] }}
+                    </div>
+                {% endif %}
             </div>
         </div>
+        
         <div class="row mb-3">
             <div class="col-md-6">
                 {{ form.data_compra.label(class="form-label") }}
                 {{ form.data_compra(class="form-control", type="date") }}
+                {% if form.data_compra.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.data_compra.errors[0] }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                {{ form.status.label(class="form-label") }}
+                {{ form.status(class="form-select") }}
             </div>
         </div>
 
@@ -30,6 +60,7 @@
         <div id="itens-container">
             
         </div>
+        
         <button type="button" class="btn btn-outline-primary mt-2" id="adicionar-item">
             <i class="bi bi-plus-circle"></i> Adicionar Item
         </button>
@@ -44,43 +75,64 @@
 </div>
 
 <script>
-document.getElementById('adicionar-item').addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('itens-container');
-    const itemIndex = container.children.length;
     
-    const itemDiv = document.createElement('div');
-    itemDiv.className = 'item-compra border p-3 mb-3 rounded';
-    itemDiv.innerHTML = `
-        <div class="row">
-            <div class="col-md-5">
-                <label class="form-label">Produto</label>
-                <select name="produto_id" class="form-select" required>
-                    <option value="">Selecione um produto</option>
-                    {% for produto in produtos %}
-                        <option value="{{ produto.id }}">{{ produto.nome }} - R$ {{ "%.2f"|format(produto.preco_compra) }}</option>
-                    {% endfor %}
-                </select>
+    document.getElementById('adicionar-item').addEventListener('click', function() {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'item-compra border p-3 mb-3 rounded';
+        itemDiv.innerHTML = `
+            <div class="row">
+                <div class="col-md-5">
+                    <label class="form-label">Produto</label>
+                    <select name="produto_id" class="form-select" required>
+                        <option value="">Selecione um produto</option>
+                        {% for produto in produtos %}
+                            <option value="{{ produto.id }}" 
+                                    data-preco="{{ produto.preco_compra }}">
+                                {{ produto.nome }} (Estoque: {{ produto.estoque }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Quantidade</label>
+                    <input type="number" name="quantidade" class="form-control" min="1" step="1" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Preço Unitário (R$)</label>
+                    <input type="number" name="preco_unitario" class="form-control preco-unitario" 
+                           min="0.01" step="0.01" required>
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="button" class="btn btn-outline-danger remover-item">Remover</button>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Quantidade</label>
-                <input type="number" name="quantidade" class="form-control" min="1" step="1" required>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Preço Unitário</label>
-                <input type="number" name="preco_unitario" class="form-control" min="0.01" step="0.01" required>
-            </div>
-            <div class="col-md-1 d-flex align-items-end">
-                <button type="button" class="btn btn-outline-danger">
-                    <i class="bi bi-trash">Remover</i>
-                </button>
-            </div>
-        </div>
-    `;
-    
-    container.appendChild(itemDiv);
-    
-    itemDiv.querySelector('.remover-item').addEventListener('click', function() {
-        container.removeChild(itemDiv);
+        `;
+        
+        container.appendChild(itemDiv);
+        
+        itemDiv.querySelector('select[name="produto_id"]').addEventListener('change', function() {
+            const preco = this.options[this.selectedIndex].dataset.preco;
+            if (preco) {
+                itemDiv.querySelector('input[name="preco_unitario"]').value = parseFloat(preco).toFixed(2);
+            }
+        });
+    });
+
+    container.addEventListener('click', function(e) {
+        if (e.target.closest('.remover-item')) {
+            e.target.closest('.item-compra').remove();
+        }
+    });
+
+    document.getElementById('form-compra').addEventListener('submit', function(e) {
+        const itens = document.querySelectorAll('.item-compra');
+        if (itens.length === 0) {
+            e.preventDefault();
+            alert('Adicione pelo menos um item à compra');
+            return false;
+        }
     });
 });
 </script>
