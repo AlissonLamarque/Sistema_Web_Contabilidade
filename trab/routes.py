@@ -44,14 +44,6 @@ def init_app(app):
             return redirect(url_for('produtos'))
         return render_template('produto/cadastrar_produto.html', form=form, titulo='Editar Produto')
 
-    @app.route('/excluir_produto/<int:produto_id>', methods=['POST'])
-    def excluir_produto(produto_id):
-        produto = Produto.query.get_or_404(produto_id)
-        db.session.delete(produto)
-        db.session.commit()
-        flash('Produto excluído com sucesso!', 'success')
-        return redirect(url_for('produtos'))
-
     # CLIENTES
 
     @app.route('/clientes')
@@ -91,14 +83,6 @@ def init_app(app):
             return redirect(url_for('clientes'))
         return render_template('cliente/cadastrar_cliente.html', form=form, titulo='Editar Cliente')
 
-    @app.route('/excluir_cliente/<int:cliente_id>', methods=['POST'])
-    def excluir_cliente(cliente_id):
-        cliente = Cliente.query.get_or_404(cliente_id)
-        db.session.delete(cliente)
-        db.session.commit()
-        flash('Cliente excluído com sucesso!', 'success')
-        return redirect(url_for('clientes'))
-
     # FORNECEDORES
 
     @app.route('/fornecedores')
@@ -137,14 +121,6 @@ def init_app(app):
             flash('Fornecedor atualizado com sucesso!', 'success')
             return redirect(url_for('fornecedores'))
         return render_template('fornecedor/cadastrar_fornecedor.html', form=form, titulo='Editar Fornecedor')
-
-    @app.route('/excluir_fornecedor/<int:fornecedor_id>', methods=['POST'])
-    def excluir_fornecedor(fornecedor_id):
-        fornecedor = Fornecedor.query.get_or_404(fornecedor_id)
-        db.session.delete(fornecedor)
-        db.session.commit()
-        flash('Fornecedor excluído com sucesso!', 'success')
-        return redirect(url_for('fornecedores'))
 
     # COMPRAS
 
