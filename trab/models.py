@@ -8,7 +8,7 @@ class Produto(db.Model):
     preco_compra = db.Column(db.Float, nullable=False)
     preco_venda = db.Column(db.Float, nullable=False)
     estoque = db.Column(db.Integer, nullable=False, default=0)
-    status = db.Column(db.String(20), nullable=False, default='disponível')
+    status = db.Column(db.String(20), nullable=False, default='indisponível')
 
     compras = db.relationship('Item_compra', backref='produto', lazy=True)
     vendas = db.relationship('Item_venda', backref='produto', lazy=True)
