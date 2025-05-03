@@ -16,6 +16,7 @@
                     <th>CNPJ</th>
                     <th>Cidade</th>
                     <th>Estado</th>
+                    <th>Status</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -26,12 +27,14 @@
                     <td>{{ fornecedor.cnpj }}</td>
                     <td>{{ fornecedor.cidade }}</td>
                     <td>{{ fornecedor.estado }}</td>
+                    <td>{{ fornecedor.status }}</td>
                     <td>
                         <a href="{{ url_for('editar_fornecedor', fornecedor_id=fornecedor.id) }}" class="btn btn-sm btn-primary me-2">Editar</a>
-                        <form action="{{ url_for('excluir_fornecedor', fornecedor_id=fornecedor.id) }}" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
-                        </form>
                     </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Nenhum fornecedor cadastrado</td>
                 </tr>
                 {% endfor %}
             </tbody>
