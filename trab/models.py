@@ -17,8 +17,8 @@ class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     cpf = db.Column(db.String(14), nullable=False, unique=True)
-    cidade = db.Column(db.String(20), nullable=True)
-    estado = db.Column(db.String(200), nullable=True)
+    cidade = db.Column(db.String(100), nullable=True)
+    estado = db.Column(db.String(2), nullable=True)
     status = db.Column(db.String(10), nullable=False, default='ativo')
 
     vendas = db.relationship('Venda', backref='cliente', lazy=True)

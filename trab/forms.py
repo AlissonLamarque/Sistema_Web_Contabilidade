@@ -19,6 +19,7 @@ class ClienteForm(FlaskForm):
     status = SelectField('Status', 
                        choices=[('ativo', 'Ativo'), ('inativo', 'Inativo')],
                        validators=[DataRequired()])
+    submit = SubmitField('Cadastrar Produto')
 
 class FornecedorForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
@@ -28,6 +29,7 @@ class FornecedorForm(FlaskForm):
     status = SelectField('Status', 
                        choices=[('ativo', 'Ativo'), ('inativo', 'Inativo')],
                        validators=[DataRequired()])
+    submit = SubmitField('Cadastrar Produto')
 
 class CompraForm(FlaskForm):
     fornecedor_id = StringField('Fornecedor ID', validators=[DataRequired()])
