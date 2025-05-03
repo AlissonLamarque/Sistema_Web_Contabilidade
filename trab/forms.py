@@ -7,7 +7,7 @@ class ProdutoForm(FlaskForm):
     preco_compra = FloatField('Preço de Compra', validators=[DataRequired()])
     preco_venda = FloatField('Preço de Venda', validators=[DataRequired()])
     status = SelectField('Status', 
-                       choices=[('disponivel', 'Disponível'), ('indisponivel', 'Indisponível')],
+                       choices=[('disponível', 'Disponível'), ('indisponível', 'Indisponível')],
                        validators=[DataRequired()])
     submit = SubmitField('Cadastrar Produto')
 
