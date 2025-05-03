@@ -192,12 +192,38 @@ def init_app(app):
                 app.logger.error(f"Erro em cadastrar_compra: {str(e)}", exc_info=True)
 
         return render_template('compra/cadastrar_compra.html', form=form, fornecedores=fornecedores, produtos=produtos)
+    
+    @app.route('/cancelar_compra/<int:compra_id>', methods=['POST'])
+    def cancelar_compra(compra_id):
+        compra = Compra.query.get_or_404(compra_id)
+        
+        try:
+            for item in compra.itens:
+                produto = Produto.query.get(item.produto_id)
+                produto.estoque -= item.quantidade
+                if produto.estoque > 0:
+                    produto.status = 'disponível'
+            
+            compra.status = 'cancelada'
+            db.session.commit()
+            flash('Compra cancelada com sucesso!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao cancelar compra: {str(e)}', 'danger')
+        
+        return redirect(url_for('compras'))
 
     # VENDAS
 
     @app.route('/vendas')
     def vendas():
-        vendas = Venda.query.options(db.joinedload(Venda.cliente)).all()
+        vendas = Venda.query.options(
+            db.joinedload(Venda.cliente),
+            db.joinedload(Venda.itens).joinedload(Item_venda.produto)).all()
+        
+        for venda in vendas:
+            for item in venda.itens:
+                item.custo_total = item.quantidade * item.produto.preco_compra
         return render_template('venda/vendas.html', vendas=vendas)
 
     @app.route('/cadastrar_venda', methods=['GET', 'POST'])
@@ -264,3 +290,23 @@ def init_app(app):
                 app.logger.error(f"Erro em cadastrar_venda: {str(e)}", exc_info=True)
         
         return render_template('venda/cadastrar_venda.html', form=form, produtos=produtos)
+    
+    @app.route('/cancelar_venda/<int:venda_id>', methods=['POST'])
+    def cancelar_venda(venda_id):
+        venda = Venda.query.get_or_404(venda_id)
+        
+        try:
+            for item in venda.itens:
+                produto = Produto.query.get(item.produto_id)
+                produto.estoque += item.quantidade  # Devolve ao estoque
+                produto.status = 'disponível' if produto.estoque > 0 else 'indisponível'
+            
+            venda.status = 'cancelada'
+            db.session.commit()
+            
+            flash('Venda cancelada com sucesso!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao cancelar venda: {str(e)}', 'danger')
+        
+        return redirect(url_for('vendas'))
