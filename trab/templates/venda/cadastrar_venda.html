@@ -48,15 +48,11 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="col-md-6">
-                {{ form.status.label(class="form-label") }}
-                {{ form.status(class="form-select") }}
-            </div>
         </div>
 
         <h4 class="mt-4 mb-3">Itens da Venda</h4>
         <div id="itens-container">
-            <!-- Itens serão adicionados aqui via JavaScript -->
+        
         </div>
         
         <button type="button" class="btn btn-outline-primary mt-2" id="adicionar-item">
@@ -112,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="col-md-1 d-flex align-items-end">
                     <button type="button" class="btn btn-outline-danger remover-item">
-                        <i class="bi bi-trash"></i>
+                        Remover
                     </button>
                 </div>
             </div>
@@ -123,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         container.appendChild(itemDiv);
         
-        // Preencher preço quando selecionar produto
         itemDiv.querySelector('.produto-select').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const preco = selectedOption.dataset.preco;
@@ -133,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 itemDiv.querySelector('.preco-unitario').value = parseFloat(preco).toFixed(2);
             }
             
-            // Validar estoque
             const quantidadeInput = itemDiv.querySelector('.quantidade');
             if (estoque < parseInt(quantidadeInput.value || 0)) {
                 itemDiv.querySelector('.estoque-error').classList.remove('d-none');
@@ -144,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
             calcularTotal();
         });
         
-        // Validar estoque ao alterar quantidade
         itemDiv.querySelector('.quantidade').addEventListener('input', function() {
             const selectedOption = itemDiv.querySelector('.produto-select').options[
                 itemDiv.querySelector('.produto-select').selectedIndex
@@ -164,11 +157,9 @@ document.addEventListener('DOMContentLoaded', function() {
             calcularTotal();
         });
         
-        // Atualizar total quando preço muda
         itemDiv.querySelector('.preco-unitario').addEventListener('input', calcularTotal);
     });
 
-    // Remover item (delegação de evento)
     container.addEventListener('click', function(e) {
         if (e.target.closest('.remover-item')) {
             e.target.closest('.item-venda').remove();
@@ -176,9 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Validação antes de enviar
     document.getElementById('form-venda').addEventListener('submit', function(e) {
-        // Verificar se há itens
         const itens = document.querySelectorAll('.item-venda');
         if (itens.length === 0) {
             e.preventDefault();
@@ -186,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         
-        // Verificar estoque para todos os itens
         let estoqueValido = true;
         itens.forEach(item => {
             const produtoSelect = item.querySelector('.produto-select');
