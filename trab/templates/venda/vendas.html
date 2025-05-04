@@ -44,14 +44,78 @@
                 </div>
                 <div class="card-footer bg-transparent">
                     <div class="d-flex justify-content-end">
-                        <a href="#" class="btn btn-sm btn-outline-primary me-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
+                                data-bs-toggle="modal" data-bs-target="#detalhesVenda{{ venda.id }}">
                             <i class="bi bi-eye"></i> Detalhes
-                        </a>
+                        </button>
                         <form action="{{ url_for('cancelar_venda', venda_id=venda.id) }}" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
-                                Cancelar
+                                <i class="bi-x-circle"></i> Cancelar
                             </button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="detalhesVenda{{ venda.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalhes da Venda - {{ venda.cliente.nome }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Cliente:</strong> {{ venda.cliente.nome if venda.cliente else 'N/A' }}<br>
+                                <strong>CPF:</strong> {{ venda.cliente.cpf if venda.cliente else 'N/A' }}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Forma de Pagamento:</strong> 
+                                {{ 'À Vista' if venda.forma_pagamento == 'vista' else 'A Prazo' }}<br>
+                                <strong>Data:</strong> {{ venda.data_venda.strftime('%d/%m/%Y') }}
+                            </div>
+                        </div>
+                        
+                        <h6 class="mt-4 mb-3">Itens da Venda</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Qtd</th>
+                                        <th>Preço Unit.</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in venda.itens %}
+                                    <tr>
+                                        <td>{{ item.produto.nome }}</td>
+                                        <td>{{ item.quantidade }}</td>
+                                        <td>R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+                                        <td>R$ {{ "%.2f"|format(item.quantidade * item.preco_unitario) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <strong>Status:</strong> 
+                                <span class="badge bg-{{ 'success' if venda.status == 'confirmada' else 'secondary' }}">
+                                    {{ venda.status }}
+                                </span>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h5>Total: R$ {{ "%.2f"|format(venda.valor_total) }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                     </div>
                 </div>
             </div>

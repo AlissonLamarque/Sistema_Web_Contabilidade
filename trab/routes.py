@@ -126,7 +126,10 @@ def init_app(app):
 
     @app.route('/compras')
     def compras():
-        compras = Compra.query.order_by(Compra.data_compra.desc()).all()
+        compras = Compra.query.options(
+            db.joinedload(Compra.fornecedor),
+            db.joinedload(Compra.itens).joinedload(Item_compra.produto)
+        ).order_by(Compra.data_compra.desc()).all()
         return render_template('compra/compras.html', compras=compras)
 
     @app.route('/cadastrar_compra', methods=['GET', 'POST'])
