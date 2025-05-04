@@ -301,7 +301,7 @@ def init_app(app):
         try:
             for item in venda.itens:
                 produto = Produto.query.get(item.produto_id)
-                produto.estoque += item.quantidade  # Devolve ao estoque
+                produto.estoque += item.quantidade
                 produto.status = 'disponível' if produto.estoque > 0 else 'indisponível'
             
             venda.status = 'cancelada'
