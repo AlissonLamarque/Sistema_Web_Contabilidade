@@ -12,8 +12,19 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     
-    from routes import init_app
-    init_app(app)
+    from routes.base import base_bp
+    from routes.clientes import clientes_bp
+    from routes.compras import compras_bp
+    from routes.fornecedores import fornecedores_bp
+    from routes.produtos import produtos_bp
+    from routes.vendas import vendas_bp
+    
+    app.register_blueprint(base_bp)
+    app.register_blueprint(clientes_bp)
+    app.register_blueprint(compras_bp)
+    app.register_blueprint(fornecedores_bp)
+    app.register_blueprint(produtos_bp)
+    app.register_blueprint(vendas_bp)
     
     return app
 
