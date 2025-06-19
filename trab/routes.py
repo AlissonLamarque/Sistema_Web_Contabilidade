@@ -238,22 +238,34 @@ def init_app(app):
             Produto.estoque > 0
         ).all()
         
-        if form.validate_on_submit():
+        if request.method == 'POST':
             try:
+                cliente_id = form.cliente_id.data
+                forma_pagamento = form.forma_pagamento.data
+                data_venda = form.data_venda.data
+
+                if not all([cliente_id, forma_pagamento, data_venda]):
+                    flash('Preencha todos os campos obrigatórios', 'danger')
+                    return redirect(url_for('cadastrar_venda'))
+
                 nova_venda = Venda(
                     cliente_id=form.cliente_id.data,
                     forma_pagamento=form.forma_pagamento.data,
                     data_venda=form.data_venda.data,
                     valor_total=0.0,
-                    status=form.status.data
                 )
                 db.session.add(nova_venda)
                 db.session.flush()
                 
-                valor_total = 0
+                valor_total = 0.0
                 produtos_ids = request.form.getlist('produto_id')
                 quantidades = request.form.getlist('quantidade')
                 precos_unitarios = request.form.getlist('preco_unitario')
+
+                if not produtos_ids:
+                    flash('Adicione pelo menos um item à venda', 'danger')
+                    db.session.rollback()
+                    return redirect(url_for('cadastrar_venda'))
                 
                 for produto_id, quantidade, preco_unitario in zip(produtos_ids, quantidades, precos_unitarios):
                     if not all([produto_id, quantidade, preco_unitario]):
