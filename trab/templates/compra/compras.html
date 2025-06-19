@@ -3,7 +3,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Lista de Compras</h2>
-        <a href="{{ url_for('cadastrar_compra') }}" class="btn btn-primary">
+        <a href="{{ url_for('compras_bp.cadastrar_compra') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Nova Compra
         </a>
     </div>
@@ -44,7 +44,7 @@
                                 data-bs-toggle="modal" data-bs-target="#detalhesCompra{{ compra.id }}">
                             <i class="bi bi-eye"></i> Detalhes
                         </button>
-                        <form action="{{ url_for('cancelar_compra', compra_id=compra.id) }}" method="POST" style="display: inline;">
+                        <form action="{{ url_for('compras_bp.cancelar_compra', compra_id=compra.id) }}" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi-x-circle"></i> Cancelar
                             </button>

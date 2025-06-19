@@ -3,7 +3,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Lista de Vendas</h2>
-        <a href="{{ url_for('cadastrar_venda') }}" class="btn btn-primary">
+        <a href="{{ url_for('vendas_bp.cadastrar_venda') }}" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Nova Venda
         </a>
     </div>
@@ -48,7 +48,7 @@
                                 data-bs-toggle="modal" data-bs-target="#detalhesVenda{{ venda.id }}">
                             <i class="bi bi-eye"></i> Detalhes
                         </button>
-                        <form action="{{ url_for('cancelar_venda', venda_id=venda.id) }}" method="POST" style="display: inline;">
+                        <form action="{{ url_for('vendas_bp.cancelar_venda', venda_id=venda.id) }}" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi-x-circle"></i> Cancelar
                             </button>
