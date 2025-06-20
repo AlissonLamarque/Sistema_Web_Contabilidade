@@ -6,14 +6,27 @@ vendas_bp = Blueprint('vendas_bp', __name__, template_folder='templates', static
 
 @vendas_bp.route('/vendas')
 def vendas():
-    vendas = Venda.query.options(
-        db.joinedload(Venda.cliente),
-        db.joinedload(Venda.itens).joinedload(Item_venda.produto)).all()
+    options = [
+        db.joinedload(Venda.itens).joinedload(Item_venda.produto)
+    ]
     
-    for venda in vendas:
+    vendas_confirmadas = Venda.query.options(*options)\
+        .filter_by(status='confirmada')\
+        .order_by(Venda.data_venda.desc()).all()
+    vendas_canceladas = Venda.query.options(*options)\
+        .filter_by(status='cancelada')\
+        .order_by(Venda.data_venda.desc()).all()
+    
+    for venda in vendas_confirmadas:
         for item in venda.itens:
             item.custo_total = item.quantidade * item.produto.preco_compra
-    return render_template('venda/vendas.html', vendas=vendas)
+    for venda in vendas_canceladas:
+        for item in venda.itens:
+            item.custo_total = item.quantidade * item.produto.preco_compra
+
+    return render_template('venda/vendas.html', 
+                           vendas_confirmadas=vendas_confirmadas, 
+                           vendas_canceladas=vendas_canceladas)
 
 @vendas_bp.route('/cadastrar_venda', methods=['GET', 'POST'])
 def cadastrar_venda():

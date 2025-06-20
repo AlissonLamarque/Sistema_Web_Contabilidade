@@ -8,8 +8,9 @@
         </a>
     </div>
 
+    <hr class="my-5"> <h3 class="mb-3">Compras Confirmadas</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for compra in compras %}
+        {% for compra in compras_confirmadas %}
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-header bg-primary text-white">
@@ -47,6 +48,123 @@
                         <form action="{{ url_for('compras_bp.cancelar_compra', compra_id=compra.id) }}" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi-x-circle"></i> Cancelar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="detalhesCompra{{ compra.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalhes da Compra - {{ compra.nf_entrada }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>Fornecedor:</strong> {{ compra.fornecedor.nome }}<br>
+                                <strong>CNPJ:</strong> {{ compra.fornecedor.cnpj }}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Nota Fiscal:</strong> {{ compra.nf_entrada }}<br>
+                                <strong>Data:</strong> {{ compra.data_compra.strftime('%d/%m/%Y') }}
+                            </div>
+                        </div>
+                        
+                        <h6 class="mt-4 mb-3">Itens da Compra</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Qtd</th>
+                                        <th>Preço Unit.</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in compra.itens %}
+                                    <tr>
+                                        <td>{{ item.produto.nome }}</td>
+                                        <td>{{ item.quantidade }}</td>
+                                        <td>R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+                                        <td>R$ {{ "%.2f"|format(item.quantidade * item.preco_unitario) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <strong>Status:</strong> 
+                                <span class="badge bg-{{ 'success' if compra.status == 'confirmada' else 'secondary' }}">
+                                    {{ compra.status }}
+                                </span>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <h5>Total: R$ {{ "%.2f"|format(compra.valor_total) }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle-fill me-2"></i>Nenhuma compra registrada
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <hr class="my-5"> <h3 class="mb-3">Compras Canceladas</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for compra in compras_canceladas %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi-calendar2-event"></i>
+                        {{ compra.data_compra.strftime('%d/%m/%Y') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-card-heading me-2"></i>Nota Fiscal</span>
+                            <span class="fw-bold">{{ compra.nf_entrada }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-truck me-2"></i>Fornecedor</span>
+                            <span class="fw-bold">{{ compra.fornecedor.nome }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-currency-dollar me-2"></i>Custo</span>
+                            <span class="fw-bold text-danger">R$ {{ "%.2f"|format(compra.valor_total + (compra.valor_total * 0.17)) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-circle me-2"></i>Status</span>
+                            <span class="fw-bold">{{ compra.status }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
+                                data-bs-toggle="modal" data-bs-target="#detalhesCompra{{ compra.id }}">
+                            <i class="bi bi-eye"></i> Detalhes
+                        </button>
+                        <form action="{{ url_for('compras_bp.cancelar_compra', compra_id=compra.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi-x-circle"></i> Excluir
                             </button>
                         </form>
                     </div>

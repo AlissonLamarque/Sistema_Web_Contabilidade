@@ -6,11 +6,27 @@ compras_bp = Blueprint('compras_bp', __name__, template_folder='templates', stat
 
 @compras_bp.route('/compras')
 def compras():
-    compras = Compra.query.options(
-        db.joinedload(Compra.fornecedor),
+    options = [
         db.joinedload(Compra.itens).joinedload(Item_compra.produto)
-    ).order_by(Compra.data_compra.desc()).all()
-    return render_template('compra/compras.html', compras=compras)
+    ]
+    
+    compras_confirmadas = Compra.query.options(*options)\
+        .filter_by(status='confirmada')\
+        .order_by(Compra.data_compra.desc()).all()
+    compras_canceladas = Compra.query.options(*options)\
+        .filter_by(status='cancelada')\
+        .order_by(Compra.data_compra.desc()).all()
+    
+    for compra in compras_confirmadas:
+        for item in compra.itens:
+            item.custo_total = item.quantidade * item.produto.preco_compra
+    for compra in compras_canceladas:
+        for item in compra.itens:
+            item.custo_total = item.quantidade * item.produto.preco_compra
+    
+    return render_template('compra/compras.html', 
+                           compras_confirmadas=compras_confirmadas,
+                           compras_canceladas=compras_canceladas)
 
 @compras_bp.route('/cadastrar_compra', methods=['GET', 'POST'])
 def cadastrar_compra():
