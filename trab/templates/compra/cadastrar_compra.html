@@ -62,9 +62,12 @@
         </button>
 
         <div class="mt-4">
-            <div class="d-flex justify-content-center gap-3">
-                <a href="{{ url_for('compras_bp.compras') }}" class="btn btn-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-success">Registrar</button>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>Total: <span id="total-compra">R$ 0,00</span></h5>
+                <div>
+                    <a href="{{ url_for('compras_bp.compras') }}" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Registrar</button>
+                </div>
             </div>
         </div>
     </form>
@@ -74,6 +77,24 @@
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('itens-container');
     
+    function calcularTotal() {
+        let total = 0;
+        document.querySelectorAll('.item-compra').forEach(item => {
+            const quantidadeInput = item.querySelector('input[name="quantidade"]');
+            const precoInput = item.querySelector('input[name="preco_unitario"]');
+            
+            const quantidade = parseFloat(quantidadeInput.value) || 0;
+            const preco = parseFloat(precoInput.value) || 0;
+            
+            total += quantidade * preco;
+        });
+        
+        const totalCompraSpan = document.getElementById('total-compra');
+        if (totalCompraSpan) {
+            totalCompraSpan.textContent = 'R$ ' + total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+    }
+
     document.getElementById('adicionar-item').addEventListener('click', function() {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'item-compra border p-3 mb-3 rounded';
@@ -109,16 +130,29 @@ document.addEventListener('DOMContentLoaded', function() {
         container.appendChild(itemDiv);
         
         itemDiv.querySelector('select[name="produto_id"]').addEventListener('change', function() {
-            const preco = this.options[this.selectedIndex].dataset.preco;
+            const selectedOption = this.options[this.selectedIndex];
+            const preco = selectedOption.dataset.preco;
+            const precoInput = itemDiv.querySelector('input[name="preco_unitario"]');
+            
             if (preco) {
-                itemDiv.querySelector('input[name="preco_unitario"]').value = parseFloat(preco).toFixed(2);
+                precoInput.value = parseFloat(preco).toFixed(2);
+            } else {
+                precoInput.value = '';
             }
+            calcularTotal();
         });
+
+        itemDiv.querySelector('input[name="quantidade"]').addEventListener('input', calcularTotal);
+
+        itemDiv.querySelector('input[name="preco_unitario"]').addEventListener('input', calcularTotal);
+
+
     });
 
     container.addEventListener('click', function(e) {
         if (e.target.closest('.remover-item')) {
             e.target.closest('.item-compra').remove();
+            calcularTotal();
         }
     });
 
