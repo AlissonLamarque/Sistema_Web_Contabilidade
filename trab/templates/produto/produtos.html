@@ -8,8 +8,61 @@
         </a>
     </div>
 
+    <hr class="my-5"> <h3 class="mb-3">Produtos disponíveis</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for produto in produtos %}
+        {% for produto in produtos_disponiveis %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-box-seam me-2"></i>
+                        {{ produto.nome }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-arrow-down-circle me-2"></i>Preço de Compra</span>
+                            <span class="fw-bold text-danger">R$ {{ "%.2f"|format(produto.preco_compra) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-arrow-up-circle me-2"></i>Preço de Venda</span>
+                            <span class="fw-bold text-success">R$ {{ "%.2f"|format(produto.preco_venda) }}</span>
+                        </li>
+                        {% if produto.estoque %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-bookshelf me-2"></i>Estoque</span>
+                            <span class="fw-bold">{{ produto.estoque }}</span>
+                        </li>
+                        {% endif %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-circle me-2"></i>Status</span>
+                            <span class="fw-bold">{{ produto.status }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('produtos_bp.editar_produto', produto_id=produto.id) }}" 
+                           class="btn btn-sm btn-outline-primary me-2">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle-fill me-2"></i>Nenhum produto cadastrado
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <hr class="my-5"> <h3 class="mb-3">Produtos indisponíveis</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for produto in produtos_indisponiveis %}
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-header bg-primary text-white">

@@ -6,8 +6,11 @@ produtos_bp = Blueprint('produtos_bp', __name__, template_folder='templates', st
 
 @produtos_bp.route("/produtos")
 def produtos():
-    produtos = Produto.query.all()
-    return render_template('produto/produtos.html', produtos=produtos)
+    produtos_disponiveis = Produto.query.filter_by(status='disponivel').order_by(Produto.nome).all()
+    produtos_indisponiveis = Produto.query.filter_by(status='indisponivel').order_by(Produto.nome).all()
+    return render_template('produto/produtos.html', 
+                           produtos_disponiveis=produtos_disponiveis,
+                           produtos_indisponiveis=produtos_indisponiveis)
 
 @produtos_bp.route('/cadastrar_produto', methods=['GET', 'POST'])
 def cadastrar_produto():
