@@ -1,35 +1,35 @@
-INSERT INTO produto (nome, preco_compra, preco_venda) VALUES
-('Notebook Dell i5', 2500.00, 3200.00),
-('Mouse Sem Fio Logitech', 45.90, 79.90),
-('Teclado Mecânico RGB', 120.00, 199.90),
-('Monitor 24" Samsung', 700.00, 999.00),
-('Impressora HP Laser', 650.00, 899.00),
-('SSD 500GB Kingston', 180.00, 279.90),
-('Webcam Full HD', 85.00, 149.90),
-('Roteador Wi-Fi 6', 220.00, 349.90),
-('Headphone Bluetooth', 90.00, 159.90),
-('Tablet Samsung 10"', 800.00, 1199.00);
+INSERT INTO produto (nome, preco_compra, preco_venda, estoque, status) VALUES
+('Notebook Dell i5', 2500.00, 3200.00, 0, 'indisponivel'),
+('Mouse Sem Fio Logitech', 45.90, 79.90, 0, 'indisponivel'),
+('Teclado Mecânico RGB', 120.00, 199.90, 0, 'indisponivel'),
+('Monitor 24" Samsung', 700.00, 999.00, 0, 'indisponivel'),
+('Impressora HP Laser', 650.00, 899.00, 0, 'indisponivel'),
+('SSD 500GB Kingston', 180.00, 279.90, 0, 'indisponivel'),
+('Webcam Full HD', 85.00, 149.90, 0, 'indisponivel'),
+('Roteador Wi-Fi 6', 220.00, 349.90, 0, 'indisponivel'),
+('Headphone Bluetooth', 90.00, 159.90, 0, 'indisponivel'),
+('Tablet Samsung 10"', 800.00, 1199.00, 0, 'indisponivel');
 
-INSERT INTO cliente (nome, cpf, cidade, estado) VALUES
-('João Silva', '123.456.789-01', 'São Paulo', 'SP'),
-('Maria Oliveira', '987.654.321-09', 'Rio de Janeiro', 'RJ'),
-('Carlos Souza', '456.789.123-45', 'Belo Horizonte', 'MG'),
-('Ana Santos', '789.123.456-78', 'Porto Alegre', 'RS'),
-('Pedro Costa', '321.654.987-32', 'Salvador', 'BA'),
-('Juliana Pereira', '654.321.987-65', 'Curitiba', 'PR'),
-('Marcos Rocha', '147.258.369-14', 'Fortaleza', 'CE'),
-('Fernanda Lima', '258.369.147-25', 'Recife', 'PE'),
-('Ricardo Alves', '369.147.258-36', 'Manaus', 'AM'),
-('Patrícia Gomes', '951.753.852-96', 'Brasília', 'DF');
+INSERT INTO cliente (nome, cpf, cidade, estado, status) VALUES
+('João Silva', '123.456.789-01', 'São Paulo', 'SP', 'ativo'),
+('Maria Oliveira', '987.654.321-09', 'Rio de Janeiro', 'RJ', 'ativo'),
+('Carlos Souza', '456.789.123-45', 'Belo Horizonte', 'MG', 'ativo'),
+('Ana Santos', '789.123.456-78', 'Porto Alegre', 'RS', 'ativo'),
+('Pedro Costa', '321.654.987-32', 'Salvador', 'BA', 'ativo'),
+('Juliana Pereira', '654.321.987-65', 'Curitiba', 'PR', 'ativo'),
+('Marcos Rocha', '147.258.369-14', 'Fortaleza', 'CE', 'ativo'),
+('Fernanda Lima', '258.369.147-25', 'Recife', 'PE', 'ativo'),
+('Ricardo Alves', '369.147.258-36', 'Manaus', 'AM', 'ativo'),
+('Patrícia Gomes', '951.753.852-96', 'Brasília', 'DF', 'ativo');
 
-INSERT INTO fornecedor (nome, cnpj, cidade, estado) VALUES
-('Tech Import Ltda', '12.345.678/0001-95', 'São Paulo', 'SP'),
-('Eletro Distribuidora S.A.', '98.765.432/0001-10', 'Rio de Janeiro', 'RJ'),
-('Componentes Digitais ME', '45.678.912/0001-34', 'Campinas', 'SP'),
-('Mega Atacado de Eletrônicos', '78.912.345/0001-67', 'Belo Horizonte', 'MG'),
-('Informática Express', '32.165.498/0001-76', 'Porto Alegre', 'RS'),
-('Digital Comércio Ltda', '65.432.198/0001-54', 'Salvador', 'BA'),
-('Tecno Components', '14.725.836/0001-91', 'Curitiba', 'PR'),
-('Global Tech Suppliers', '25.836.914/0001-72', 'Fortaleza', 'CE'),
-('Elétrica e Cia', '36.914.725/0001-53', 'Recife', 'PE'),
-('Mundo dos Computadores', '95.175.385/0001-29', 'Goiânia', 'GO');
+INSERT INTO fornecedor (nome, cnpj, cidade, estado, status) VALUES
+('Tech Import Ltda', '12.345.678/0001-95', 'São Paulo', 'SP', 'ativo'),
+('Eletro Distribuidora S.A.', '98.765.432/0001-10', 'Rio de Janeiro', 'RJ', 'ativo'),
+('Componentes Digitais ME', '45.678.912/0001-34', 'Campinas', 'SP', 'ativo'),
+('Mega Atacado de Eletrônicos', '78.912.345/0001-67', 'Belo Horizonte', 'MG', 'ativo'),
+('Informática Express', '32.165.498/0001-76', 'Porto Alegre', 'RS', 'ativo'),
+('Digital Comércio Ltda', '65.432.198/0001-54', 'Salvador', 'BA', 'ativo'),
+('Tecno Components', '14.725.836/0001-91', 'Curitiba', 'PR', 'ativo'),
+('Global Tech Suppliers', '25.836.914/0001-72', 'Fortaleza', 'CE', 'ativo'),
+('Elétrica e Cia', '36.914.725/0001-53', 'Recife', 'PE', 'ativo'),
+('Mundo dos Computadores', '95.175.385/0001-29', 'Goiânia', 'GO', 'ativo');
