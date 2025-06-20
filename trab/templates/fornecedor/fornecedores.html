@@ -8,6 +8,7 @@
         </a>
     </div>
 
+    <hr class="my-5"> <h3 class="mb-3">Fornecedores Ativos</h3>
     <div class="table-responsive text-center">
         <table class="table table-bordered table-hover align-middle shadow-sm">
             <thead class="table-primary">
@@ -21,24 +22,75 @@
                 </tr>
             </thead>
             <tbody>
-                {% for fornecedor in fornecedores %}
+                {% for fornecedor in fornecedores_ativos %}
                 <tr class="text-center">
                     <td>{{ fornecedor.nome }}</td>
                     <td>{{ fornecedor.cnpj }}</td>
                     <td>{{ fornecedor.cidade }}</td>
                     <td>{{ fornecedor.estado }}</td>
-                    <td>{{ fornecedor.status }}</td>
                     <td>
-                        <a href="{{ url_for('fornecedores_bp.editar_fornecedor', fornecedor_id=fornecedor.id) }}" class="btn btn-sm btn-primary me-2">Editar</a>
+                        <span class="badge bg-success">{{ fornecedor.status|capitalize }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('fornecedores_bp.editar_fornecedor', fornecedor_id=fornecedor.id) }}" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="6" class="text-center">Nenhum fornecedor cadastrado</td>
+                    <td colspan="6" class="text-center">Nenhum fornecedor ativo cadastrado</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <hr class="my-5"> <h3 class="mb-3">Fornecedores Inativos</h3>
+    <div class="table-responsive text-center">
+        <table class="table table-bordered table-hover align-middle shadow-sm">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Nome</th>
+                    <th>CNPJ</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fornecedor in fornecedores_inativos %}
+                <tr class="text-center">
+                    <td>{{ fornecedor.nome }}</td>
+                    <td>{{ fornecedor.cnpj }}</td>
+                    <td>{{ fornecedor.cidade }}</td>
+                    <td>{{ fornecedor.estado }}</td>
+                    <td>
+                        <span class="badge bg-danger">{{ fornecedor.status|capitalize }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('fornecedores_bp.editar_fornecedor', fornecedor_id=fornecedor.id) }}" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Nenhum fornecedor inativo cadastrado</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+
+<style>
+    .btn-group {
+        box-shadow: none;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+</style>
 {% endblock content %}

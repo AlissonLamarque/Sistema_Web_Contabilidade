@@ -6,8 +6,11 @@ fornecedores_bp = Blueprint('fornecedores_bp', __name__, template_folder='templa
 
 @fornecedores_bp.route('/fornecedores')
 def fornecedores():
-    fornecedores = Fornecedor.query.all()
-    return render_template('fornecedor/fornecedores.html', fornecedores=fornecedores)
+    fornecedores_ativos = Fornecedor.query.filter_by(status='ativo').order_by(Fornecedor.nome).all()
+    fornecedores_inativos = Fornecedor.query.filter_by(status='inativo').order_by(Fornecedor.nome).all()
+    return render_template('fornecedor/fornecedores.html', 
+                           fornecedores_ativos=fornecedores_ativos, 
+                           fornecedores_inativos=fornecedores_inativos)
 
 @fornecedores_bp.route('/cadastrar_fornecedor', methods=['GET', 'POST'])
 def cadastrar_fornecedor():
