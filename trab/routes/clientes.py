@@ -6,8 +6,11 @@ clientes_bp = Blueprint('clientes_bp', __name__, template_folder='templates', st
 
 @clientes_bp.route('/clientes')
 def clientes():
-    clientes = Cliente.query.all()
-    return render_template('cliente/clientes.html', clientes=clientes)
+    clientes_ativos = Cliente.query.filter_by(status='ativo').order_by(Cliente.nome).all()
+    clientes_inativos = Cliente.query.filter_by(status='inativo').order_by(Cliente.nome).all()
+    return render_template('cliente/clientes.html', 
+                           clientes_ativos=clientes_ativos, 
+                           clientes_inativos=clientes_inativos)
 
 @clientes_bp.route('/cadastrar_cliente', methods=['GET', 'POST'])
 def cadastrar_cliente():

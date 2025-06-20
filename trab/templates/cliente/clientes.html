@@ -8,6 +8,7 @@
         </a>
     </div>
 
+    <hr class="my-5"> <h3 class="mb-3">Clientes Ativos</h3>
     <div class="table-responsive text-center">
         <table class="table table-bordered table-hover align-middle shadow-sm">
             <thead class="table-primary">
@@ -21,20 +22,61 @@
                 </tr>
             </thead>
             <tbody>
-                {% for cliente in clientes %}
+                {% for cliente in clientes_ativos %}
                 <tr class="text-center">
                     <td>{{ cliente.nome }}</td>
                     <td>{{ cliente.cpf }}</td>
                     <td>{{ cliente.cidade if cliente.cidade else '-' }}</td>
                     <td>{{ cliente.estado if cliente.estado else '-' }}</td>
-                    <td>{{ cliente.status }}</td>
                     <td>
-                        <a href="{{ url_for('clientes_bp.editar_cliente', cliente_id=cliente.id) }}" class="btn btn-sm btn-primary me-2">Editar</a>
+                        <span class="badge bg-success">{{ cliente.status|capitalize }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('clientes_bp.editar_cliente', cliente_id=cliente.id) }}" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="6" class="text-center">Nenhum cliente cadastrado</td>
+                    <td colspan="6" class="text-center">Nenhum cliente ativo encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <hr class="my-5"> <h3 class="mb-3">Clientes Inativos</h3>
+    <div class="table-responsive text-center">
+        <table class="table table-bordered table-hover align-middle shadow-sm">
+            <thead class="table-secondary"> <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes_inativos %}
+                <tr class="text-center">
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.cpf }}</td>
+                    <td>{{ cliente.cidade if cliente.cidade else '-' }}</td>
+                    <td>{{ cliente.estado if cliente.estado else '-' }}</td>
+                    <td>
+                        <span class="badge bg-danger">{{ cliente.status|capitalize }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('clientes_bp.editar_cliente', cliente_id=cliente.id) }}" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Nenhum cliente inativo encontrado.</td>
                 </tr>
                 {% endfor %}
             </tbody>
