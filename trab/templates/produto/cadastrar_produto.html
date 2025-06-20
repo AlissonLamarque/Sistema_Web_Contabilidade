@@ -20,11 +20,12 @@
             {{ form.preco_venda.label(class="form-label") }}
             {{ form.preco_venda(class="form-control") }}
         </div>
-
-        <div class="mb-3">
-            {{ form.status.label(class="form-label") }}
-            {{ form.status(class="form-control") }}
-        </div>
+        {% if titulo == 'Editar Produto' %}
+            <div class="mb-3">
+                {{ form.status.label(class="form-label") }}
+                {{ form.status(class="form-control") }}
+            </div>
+        {% endif %}
 
         <div class="d-flex justify-content-center gap-3">
             <a href="{{ url_for('produtos_bp.produtos') }}" class="btn btn-secondary">Cancelar</a>

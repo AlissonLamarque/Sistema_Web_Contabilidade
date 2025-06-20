@@ -21,7 +21,6 @@ def cadastrar_cliente():
             cpf = form.cpf.data,
             cidade = form.cidade.data,
             estado = form.estado.data,
-            status = form.status.data
         )
         db.session.add(cliente)
         db.session.commit()

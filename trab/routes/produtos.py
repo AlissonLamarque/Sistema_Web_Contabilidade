@@ -20,7 +20,6 @@ def cadastrar_produto():
             nome = form.nome.data,
             preco_compra = form.preco_compra.data,
             preco_venda = form.preco_venda.data,
-            status = form.status.data
         )
         db.session.add(produto)
         db.session.commit()

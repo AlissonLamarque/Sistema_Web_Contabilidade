@@ -21,7 +21,6 @@ def cadastrar_fornecedor():
             cnpj = form.cnpj.data,
             cidade = form.cidade.data,
             estado = form.estado.data,
-            status = form.status.data
         )
         db.session.add(fornecedor)
         db.session.commit()

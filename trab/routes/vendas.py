@@ -1,6 +1,6 @@
 from flask import render_template, url_for, redirect, flash, request, Blueprint
-from forms import ProdutoForm, ClienteForm, FornecedorForm, CompraForm, VendaForm
-from models import db, Produto, Cliente, Fornecedor, Compra, Item_compra, Venda, Item_venda
+from forms import VendaForm
+from models import db, Produto, Cliente, Venda, Item_venda
 
 vendas_bp = Blueprint('vendas_bp', __name__, template_folder='templates', static_folder='static')
 
