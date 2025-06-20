@@ -124,3 +124,23 @@ def cancelar_venda(venda_id):
         flash(f'Erro ao cancelar venda: {str(e)}', 'danger')
     
     return redirect(url_for('vendas_bp.vendas'))
+
+@vendas_bp.route('/excluir_venda/<int:venda_id>', methods=['POST'])
+def excluir_venda(venda_id):
+    venda = Venda.query.get_or_404(venda_id)
+    
+    try:
+        for item in venda.itens:
+            produto = Produto.query.get(item.produto_id)
+            produto.estoque += item.quantidade
+            produto.status = 'disponível' if produto.estoque > 0 else 'indisponível'
+        
+        db.session.delete(venda)
+        db.session.commit()
+        
+        flash('Venda excluída com sucesso!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao excluir venda: {str(e)}', 'danger')
+    
+    return redirect(url_for('vendas_bp.vendas'))

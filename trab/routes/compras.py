@@ -100,8 +100,7 @@ def cancelar_compra(compra_id):
         for item in compra.itens:
             produto = Produto.query.get(item.produto_id)
             produto.estoque -= item.quantidade
-            if produto.estoque > 0:
-                produto.status = 'disponível'
+            produto.status = 'disponível' if produto.estoque > 0 else 'indisponível'
         
         compra.status = 'cancelada'
         db.session.commit()
@@ -109,5 +108,19 @@ def cancelar_compra(compra_id):
     except Exception as e:
         db.session.rollback()
         flash(f'Erro ao cancelar compra: {str(e)}', 'danger')
+    
+    return redirect(url_for('compras_bp.compras'))
+
+@compras_bp.route('/excluir_compra/<int:compra_id>', methods=['POST'])
+def excluir_compra(compra_id):
+    compra = Compra.query.get_or_404(compra_id)
+    
+    try:
+        db.session.delete(compra)
+        db.session.commit()
+        flash('Compra excluída com sucesso!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao excluir compra: {str(e)}', 'danger')
     
     return redirect(url_for('compras_bp.compras'))
