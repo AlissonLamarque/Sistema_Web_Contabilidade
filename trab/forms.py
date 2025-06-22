@@ -33,7 +33,9 @@ class FornecedorForm(FlaskForm):
 
 class CompraForm(FlaskForm):
     fornecedor_id = SelectField('Fornecedor', coerce=int, validators=[DataRequired()], choices=[])
-    nf_entrada = StringField('NF Entrada', validators=[DataRequired()])
+    forma_pagamento = SelectField('Forma de Pagamento',
+                                choices=[('vista', 'À Vista'), ('prazo', 'A Prazo')],
+                                validators=[DataRequired()])
     data_compra = StringField('Data da Compra', validators=[DataRequired()])
     status = SelectField('Status', 
                        choices=[('confirmada', 'Confirmada'), ('cancelada', 'Cancelada')],
