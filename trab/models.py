@@ -42,7 +42,6 @@ class Compra(db.Model):
     status = db.Column(db.String(20), default='confirmada')
     status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
 
-
     itens = db.relationship('Item_compra', backref='compra', lazy=True, cascade="all, delete-orphan")
 
 class Item_compra(db.Model):
@@ -60,7 +59,6 @@ class Venda(db.Model):
     valor_total = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(20), default='confirmada')
     status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
-
 
     itens = db.relationship('Item_venda', backref='venda', lazy=True, cascade="all, delete-orphan")
 
