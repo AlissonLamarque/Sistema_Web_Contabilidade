@@ -1,7 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_utils import generic_relationship
+from sqlalchemy.orm import foreign
 
 db = SQLAlchemy()
 
+# MODELS BÁSICOS
+
+## Define o modelo básico de produto (mercadoria)
 class Produto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
@@ -13,6 +18,7 @@ class Produto(db.Model):
     compras = db.relationship('Item_compra', backref='produto', lazy=True)
     vendas = db.relationship('Item_venda', backref='produto', lazy=True)
 
+## Define o modelo básico de cliente (Pessoa Física)
 class Cliente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
@@ -23,6 +29,7 @@ class Cliente(db.Model):
 
     vendas = db.relationship('Venda', backref='cliente', lazy=True)
 
+## Define o modelo básico de fornecedor (Pessoa Jurídica)
 class Fornecedor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
@@ -31,8 +38,12 @@ class Fornecedor(db.Model):
     estado = db.Column(db.String(2), nullable=True)
     status = db.Column(db.String(10), nullable=False, default='ativo')
 
-    compras = db.relationship('Compra', backref='fornecedor', lazy=True)
+    compras_produtos = db.relationship('Compra', backref='fornecedor', lazy=True)
+    compras_patrimonio = db.relationship('CompraPatrimonio', backref='fornecedor_patrimonio', lazy=True)
 
+# MODELS DE COMPRAS E VENDAS
+
+## Define o modelo de compra de produtos
 class Compra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fornecedor_id = db.Column(db.Integer, db.ForeignKey('fornecedor.id'), nullable=False)
@@ -43,14 +54,19 @@ class Compra(db.Model):
     status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
 
     itens = db.relationship('Item_compra', backref='compra', lazy=True, cascade="all, delete-orphan")
+    movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
+                                                primaryjoin="and_(Compra.id==foreign(MovimentacaoFinanceira.origem_id), "
+                                                            "MovimentacaoFinanceira.origem_tipo=='Compra')")
 
-class Item_compra(db.Model):
+## Define o modelo de item de compra, que relaciona produtos com compras
+class ItemCompra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     compra_id = db.Column(db.Integer, db.ForeignKey('compra.id'), nullable=False)
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
     preco_unitario = db.Column(db.Float, nullable=False)
 
+## Define o modelo de venda de produtos
 class Venda(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=False)
@@ -61,24 +77,20 @@ class Venda(db.Model):
     status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
 
     itens = db.relationship('Item_venda', backref='venda', lazy=True, cascade="all, delete-orphan")
-
-class Item_venda(db.Model):
+    movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
+                                                primaryjoin="and_(Venda.id==foreign(MovimentacaoFinanceira.origem_id), "
+                                                            "MovimentacaoFinanceira.origem_tipo=='Venda')")
+## Define o modelo de item de venda, que relaciona produtos com vendas
+class ItemVenda(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     venda_id = db.Column(db.Integer, db.ForeignKey('venda.id'), nullable=False)
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
     preco_unitario = db.Column(db.Float, nullable=False)
 
-class MovimentacaoFinanceira(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    descricao = db.Column(db.String(200), nullable=False)
-    valor = db.Column(db.Float, nullable=False)
-    tipo = db.Column(db.String(20), nullable=False)
+# MODELS DE PATRIMÔNIO E MOVIMENTAÇÃO FINANCEIRA
 
-    venda_id = db.Column(db.Integer, db.ForeignKey('venda.id'), nullable=True)
-    compra_id = db.Column(db.Integer, db.ForeignKey('compra.id'), nullable=True)
-
+## Define o modelo de patrimônio, que representa bens da empresa
 class Patrimonio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
@@ -89,6 +101,7 @@ class Patrimonio(db.Model):
 
     compras = db.relationship('CompraPatrimonio', backref='patrimonio', lazy=True)
 
+## Define o modelo de compra de patrimônio, que relaciona fornecedores com bens patrimoniais
 class CompraPatrimonio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     patrimonio_id = db.Column(db.Integer, db.ForeignKey('patrimonio.id'), nullable=False)
@@ -97,3 +110,18 @@ class CompraPatrimonio(db.Model):
     valor_total = db.Column(db.Float, nullable=False)
     forma_pagamento = db.Column(db.String(50), nullable=False)
     status_pagamento = db.Column(db.String(50), default='Pendente', nullable=False)
+
+    movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
+                                        primaryjoin="and_(CompraPatrimonio.id==foreign(MovimentacaoFinanceira.origem_id), "
+                                                    "MovimentacaoFinanceira.origem_tipo=='CompraPatrimonio')")
+
+## Define o modelo de movimentação financeira
+class MovimentacaoFinanceira(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.DateTime, nullable=False)
+    descricao = db.Column(db.String(200), nullable=False)
+    valor = db.Column(db.Float, nullable=False)
+    origem_tipo = db.Column(db.String(50), nullable=False)
+    origem_id = db.Column(db.Integer, nullable=False)
+
+    origem = generic_relationship(origem_tipo, origem_id)
