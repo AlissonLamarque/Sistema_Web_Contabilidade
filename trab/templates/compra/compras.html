@@ -15,19 +15,19 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi-calendar2-event"></i>
+                        <i class="bi-calendar2-event me-2"></i>
                         {{ compra.data_compra.strftime('%d/%m/%Y') }}
                     </h5>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-card-heading me-2"></i>Nota Fiscal</span>
-                            <span class="fw-bold">{{ compra.nf_entrada }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-truck me-2"></i>Fornecedor</span>
                             <span class="fw-bold">{{ compra.fornecedor.nome }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
+                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo' }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-currency-dollar me-2"></i>Custo</span>
@@ -59,7 +59,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Detalhes da Compra - {{ compra.nf_entrada }}</h5>
+                        <h5 class="modal-title">Detalhes da Compra - {{ compra.forma_pagamento }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -69,7 +69,8 @@
                                 <strong>CNPJ:</strong> {{ compra.fornecedor.cnpj }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Nota Fiscal:</strong> {{ compra.nf_entrada }}<br>
+                                <strong>Forma de Pagamento:</strong>
+                                {{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo' }}<br>
                                 <strong>Data:</strong> {{ compra.data_compra.strftime('%d/%m/%Y') }}
                             </div>
                         </div>
@@ -132,15 +133,15 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h5 class="card-title mb-0">
-                        <i class="bi-calendar2-event"></i>
+                        <i class="bi-calendar2-event me-2"></i>
                         {{ compra.data_compra.strftime('%d/%m/%Y') }}
                     </h5>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-card-heading me-2"></i>Nota Fiscal</span>
-                            <span class="fw-bold">{{ compra.nf_entrada }}</span>
+                            <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
+                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo' }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-truck me-2"></i>Fornecedor</span>
@@ -176,7 +177,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Detalhes da Compra - {{ compra.nf_entrada }}</h5>
+                        <h5 class="modal-title">Detalhes da Compra - {{ compra.forma_pagamento }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -186,7 +187,8 @@
                                 <strong>CNPJ:</strong> {{ compra.fornecedor.cnpj }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Nota Fiscal:</strong> {{ compra.nf_entrada }}<br>
+                                <strong>Forma de Pagamento:</strong>
+                                {{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo' }}<br>
                                 <strong>Data:</strong> {{ compra.data_compra.strftime('%d/%m/%Y') }}
                             </div>
                         </div>

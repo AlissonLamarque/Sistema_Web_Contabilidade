@@ -1,13 +1,13 @@
 from flask import render_template, url_for, redirect, flash, request, Blueprint
 from forms import CompraForm
-from models import db, Produto, Fornecedor, Compra, Item_compra
+from models import db, Produto, Fornecedor, Compra, ItemCompra
 
 compras_bp = Blueprint('compras_bp', __name__, template_folder='templates', static_folder='static')
 
 @compras_bp.route('/compras')
 def compras():
     options = [
-        db.joinedload(Compra.itens).joinedload(Item_compra.produto)
+        db.joinedload(Compra.itens).joinedload(ItemCompra.produto)
     ]
     
     compras_confirmadas = Compra.query.options(*options)\
@@ -37,13 +37,13 @@ def cadastrar_compra():
     
     if request.method == 'POST':
         try:
-            if not all([form.fornecedor_id.data, form.nf_entrada.data, form.data_compra.data]):
+            if not all([form.fornecedor_id.data, form.forma_pagamento.data, form.data_compra.data]):
                 flash('Preencha todos os campos obrigatórios', 'danger')
                 return redirect(url_for('compras_bp.cadastrar_compra'))
 
             nova_compra = Compra(
                 fornecedor_id=form.fornecedor_id.data,
-                nf_entrada=form.nf_entrada.data,
+                forma_pagamento=form.forma_pagamento.data,
                 data_compra=form.data_compra.data,
                 status=form.status.data,
                 valor_total=0
@@ -65,7 +65,7 @@ def cadastrar_compra():
                 if not produto:
                     continue
 
-                item = Item_compra(
+                item = ItemCompra(
                     compra_id=nova_compra.id,
                     produto_id=produtos_ids[i],
                     quantidade=int(quantidades[i]),

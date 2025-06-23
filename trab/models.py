@@ -15,8 +15,8 @@ class Produto(db.Model):
     estoque = db.Column(db.Integer, nullable=False, default=0)
     status = db.Column(db.String(20), nullable=False, default='indisponível')
 
-    compras = db.relationship('Item_compra', backref='produto', lazy=True)
-    vendas = db.relationship('Item_venda', backref='produto', lazy=True)
+    compras = db.relationship('ItemCompra', backref='produto', lazy=True)
+    vendas = db.relationship('ItemVenda', backref='produto', lazy=True)
 
 ## Define o modelo básico de cliente (Pessoa Física)
 class Cliente(db.Model):
@@ -53,7 +53,7 @@ class Compra(db.Model):
     status = db.Column(db.String(20), default='confirmada')
     status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
 
-    itens = db.relationship('Item_compra', backref='compra', lazy=True, cascade="all, delete-orphan")
+    itens = db.relationship('ItemCompra', backref='compra', lazy=True, cascade="all, delete-orphan")
     movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
                                                 primaryjoin="and_(Compra.id==foreign(MovimentacaoFinanceira.origem_id), "
                                                             "MovimentacaoFinanceira.origem_tipo=='Compra')")
@@ -76,7 +76,7 @@ class Venda(db.Model):
     status = db.Column(db.String(20), default='confirmada')
     status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
 
-    itens = db.relationship('Item_venda', backref='venda', lazy=True, cascade="all, delete-orphan")
+    itens = db.relationship('ItemVenda', backref='venda', lazy=True, cascade="all, delete-orphan")
     movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
                                                 primaryjoin="and_(Venda.id==foreign(MovimentacaoFinanceira.origem_id), "
                                                             "MovimentacaoFinanceira.origem_tipo=='Venda')")

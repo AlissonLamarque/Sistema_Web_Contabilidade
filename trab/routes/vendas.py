@@ -1,13 +1,13 @@
 from flask import render_template, url_for, redirect, flash, request, Blueprint
 from forms import VendaForm
-from models import db, Produto, Cliente, Venda, Item_venda
+from models import db, Produto, Cliente, Venda, ItemVenda
 
 vendas_bp = Blueprint('vendas_bp', __name__, template_folder='templates', static_folder='static')
 
 @vendas_bp.route('/vendas')
 def vendas():
     options = [
-        db.joinedload(Venda.itens).joinedload(Item_venda.produto)
+        db.joinedload(Venda.itens).joinedload(ItemVenda.produto)
     ]
     
     vendas_confirmadas = Venda.query.options(*options)\
@@ -79,7 +79,7 @@ def cadastrar_venda():
                     db.session.rollback()
                     return redirect(url_for('cadastrar_venda'))
 
-                item = Item_venda(
+                item = ItemVenda(
                     venda_id=nova_venda.id,
                     produto_id=produto_id,
                     quantidade=quantidade,
