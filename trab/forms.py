@@ -9,10 +9,14 @@ class ProdutoForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
     preco_compra = FloatField('Preço de Compra', validators=[DataRequired()])
     preco_venda = FloatField('Preço de Venda', validators=[DataRequired()])
+    submit = SubmitField('Cadastrar Produto')
+
+## Define o formulário para edição de produtos
+class EditarProdutoForm(ProdutoForm):
     status = SelectField('Status', 
                        choices=[('disponível', 'Disponível'), ('indisponível', 'Indisponível')],
                        validators=[DataRequired()])
-    submit = SubmitField('Cadastrar Produto')
+    submit = SubmitField('Salvar Alterações')
 
 ## Define o formulário para cadastro de clientes
 class ClienteForm(FlaskForm):
@@ -20,10 +24,14 @@ class ClienteForm(FlaskForm):
     cpf = StringField('CPF', validators=[DataRequired()])
     cidade = StringField('Cidade')
     estado = StringField('Estado')
+    submit = SubmitField('Cadastrar Produto')
+
+## Define o formulário para edição de clientes
+class EditarClienteForm(ClienteForm):
     status = SelectField('Status', 
                        choices=[('ativo', 'Ativo'), ('inativo', 'Inativo')],
                        validators=[DataRequired()])
-    submit = SubmitField('Cadastrar Produto')
+    submit = SubmitField('Salvar Alterações')
 
 ## Define o formulário para cadastro de fornecedores
 class FornecedorForm(FlaskForm):
@@ -31,10 +39,14 @@ class FornecedorForm(FlaskForm):
     cnpj = StringField('CNPJ', validators=[DataRequired()])
     cidade = StringField('Cidade')
     estado = StringField('Estado')
+    submit = SubmitField('Cadastrar Produto')
+
+## Define o formulário para edição de fornecedores
+class EditarFornecedorForm(FornecedorForm):
     status = SelectField('Status', 
                        choices=[('ativo', 'Ativo'), ('inativo', 'Inativo')],
                        validators=[DataRequired()])
-    submit = SubmitField('Cadastrar Produto')
+    submit = SubmitField('Salvar Alterações')
 
 # Forms de Compras e Vendas
 
