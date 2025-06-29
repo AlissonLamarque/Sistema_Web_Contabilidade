@@ -80,6 +80,7 @@ class Venda(db.Model):
     movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
                                                 primaryjoin="and_(Venda.id==foreign(MovimentacaoFinanceira.origem_id), "
                                                             "MovimentacaoFinanceira.origem_tipo=='Venda')")
+    
 ## Define o modelo de item de venda, que relaciona produtos com vendas
 class ItemVenda(db.Model):
     id = db.Column(db.Integer, primary_key=True)

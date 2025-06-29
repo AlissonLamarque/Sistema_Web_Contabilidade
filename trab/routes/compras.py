@@ -45,7 +45,6 @@ def cadastrar_compra():
                 fornecedor_id=form.fornecedor_id.data,
                 forma_pagamento=form.forma_pagamento.data,
                 data_compra=form.data_compra.data,
-                status=form.status.data,
                 valor_total=0
             )
             db.session.add(nova_compra)

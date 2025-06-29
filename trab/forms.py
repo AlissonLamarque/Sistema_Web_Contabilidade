@@ -57,9 +57,6 @@ class CompraForm(FlaskForm):
                                 choices=[('vista', 'À Vista'), ('prazo', 'A Prazo')],
                                 validators=[DataRequired()])
     data_compra = StringField('Data da Compra', validators=[DataRequired()])
-    status = SelectField('Status', 
-                       choices=[('confirmada', 'Confirmada'), ('cancelada', 'Cancelada')],
-                       validators=[DataRequired()])
     submit = SubmitField('Cadastrar Compra')
 
 ## Define o formulário para cadastro de vendas
@@ -69,9 +66,6 @@ class VendaForm(FlaskForm):
                                 choices=[('vista', 'À Vista'), ('prazo', 'A Prazo')],
                                 validators=[DataRequired()])
     data_venda = StringField('Data da Venda', validators=[DataRequired()])
-    status = SelectField('Status', 
-                       choices=[('confirmada', 'Confirmada'), ('cancelada', 'Cancelada')],
-                       validators=[DataRequired()])
     submit = SubmitField('Cadastrar Venda')
 
 # Forms de Patrimônio e Movimentação Financeira
