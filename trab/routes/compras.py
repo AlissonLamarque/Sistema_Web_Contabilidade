@@ -41,10 +41,16 @@ def cadastrar_compra():
                 flash('Preencha todos os campos obrigatórios', 'danger')
                 return redirect(url_for('compras_bp.cadastrar_compra'))
 
+            forma_de_pagamento = form.forma_pagamento.data
+        
+            if forma_de_pagamento != 'A Prazo':
+                status_pagamento = 'Pago'
+
             nova_compra = Compra(
                 fornecedor_id=form.fornecedor_id.data,
                 forma_pagamento=form.forma_pagamento.data,
                 data_compra=form.data_compra.data,
+                status_pagamento = status_pagamento,
                 valor_total=0
             )
             db.session.add(nova_compra)
