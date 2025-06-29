@@ -13,3 +13,28 @@ def bens():
                            bens_ativos=bens_ativos, 
                            bens_manutencao=bens_manutencao, 
                            bens_vendidos=bens_vendidos)
+
+@patrimonio_bp.route('/cadastrar_bem', methods=['GET', 'POST'])
+def cadastrar_bem():
+    form = PatrimonioForm()
+    
+    if form.validate_on_submit():
+        try:
+            novo_bem = Patrimonio(
+                nome=form.nome.data,
+                descricao=form.descricao.data,
+                valor=form.valor.data,
+                data_aquisicao=form.data_aquisicao.data
+            )
+            
+            db.session.add(novo_bem)
+            db.session.commit()
+            
+            flash('Bem patrimonial cadastrado com sucesso!', 'success')
+            return redirect(url_for('patrimonio_bp.bens'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Ocorreu um erro ao cadastrar o bem: {str(e)}', 'danger')
+
+    return render_template('patrimonio/cadastrar_patrimonio.html', form=form, titulo='Cadastrar Bem Patrimonial')

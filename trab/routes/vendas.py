@@ -47,10 +47,16 @@ def cadastrar_venda():
                 flash('Preencha todos os campos obrigatórios', 'danger')
                 return redirect(url_for('cadastrar_venda'))
 
+            forma_de_pagamento = form.forma_pagamento.data
+        
+            if forma_de_pagamento != 'A Prazo':
+                status_pagamento = 'Pago'
+
             nova_venda = Venda(
                 cliente_id=form.cliente_id.data,
                 forma_pagamento=form.forma_pagamento.data,
                 data_venda=form.data_venda.data,
+                status_pagamento=status_pagamento,
                 valor_total=0.0,
             )
             db.session.add(nova_venda)

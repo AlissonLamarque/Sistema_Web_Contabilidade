@@ -73,12 +73,11 @@ class VendaForm(FlaskForm):
 ## Define o formulário para cadastro de bem patrimonial
 class PatrimonioForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
-    descricao = TextAreaField('Descrição', validators=[DataRequired()])
+    descricao = TextAreaField('Descrição')
     valor = FloatField('Valor', validators=[DataRequired(), NumberRange(min=0.01)])
     data_aquisicao = StringField('Data de Aquisição', validators=[DataRequired()])
-    status = SelectField('Status', choices=[('ativo', 'Ativo'), ('manutencao', 'Em Manutenção'), ('vendido', 'Vendido')],
-                        validators=[DataRequired()])
-    submit = SubmitField('Cadastrar Bem Patrimonial')
+    status = SelectField('Status', choices=[('ativo', 'Ativo'), ('manutencao', 'Em Manutenção'), ('vendido', 'Vendido')])
+    submit = SubmitField('Cadastrar Bem')
 
 ## Define o formulário para compra de bem patrimonial
 class CompraPatrimonioForm(FlaskForm):
