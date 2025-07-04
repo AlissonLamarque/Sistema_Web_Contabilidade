@@ -1,10 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container mt-5" style="max-width: 600px;">
-    <h2 class="mb-4 text-center">Registrar Capital Social</h2>
-    <p class="text-center text-muted mb-4">
-        Use este formulário para registrar o valor inicial investido na empresa.
-    </p>
+    <h2 class="mb-4 text-center">Registro de Capital Social</h2>
     
     <div class="card shadow-sm">
         <div class="card-body p-4">
@@ -13,7 +10,7 @@
 
                 <div class="mb-3">
                     {{ form.valor.label(class="form-label") }}
-                    {{ form.valor(class="form-control form-control-lg", placeholder="Ex: 50000.00") }}
+                    {{ form.valor(class="form-control form-control-lg") }}
                 </div>
 
                 <div class="mb-3">
@@ -27,7 +24,7 @@
                 </div>
                 
                 <div class="d-grid gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">{{ form.submit.label.text }}</button>
+                    <button type="submit" class="btn btn-success btn-lg">{{ form.submit.label.text }}</button>
                     <a href="{{ url_for('base_bp.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                 </div>
             </form>

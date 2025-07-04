@@ -99,6 +99,7 @@ class CompraPatrimonio(db.Model):
     valor = db.Column(db.Float, nullable=False)
     forma_pagamento = db.Column(db.String(50), nullable=False)
     status_pagamento = db.Column(db.String(50), default='Pendente', nullable=False)
+    status = db.Column(db.String(20), default='Ativo')
 
     movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
                                         primaryjoin="and_(CompraPatrimonio.id==foreign(MovimentacaoFinanceira.origem_id), "

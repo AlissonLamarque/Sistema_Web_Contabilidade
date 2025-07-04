@@ -43,18 +43,19 @@
                         <a class="nav-link" href="{{url_for('patrimonio_bp.bens')}}">Patrimônio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('patrimonio_bp.bens')}}">Balanço</a>
+                        <a class="nav-link" href="{{url_for('financeiro_bp.movimentacoes')}}">Balanço</a>
                     </li>
 
                     <div class="d-flex align-items-center gap-3">
-                        <div class="bg-primary-subtle text-primary-emphasis p-2 rounded d-flex align-items-center gap-2">
+                        <a class="bg-primary-subtle text-primary-emphasis p-2 rounded d-flex align-items-center gap-2 text-decoration-none">
                             <i class="bi bi-building-check text-primary fs-4"></i>
-                            <div style="font-weight: 500;">R$ 0,00</div>
-                        </div>
-                        <div class="bg-primary-subtle text-primary-emphasis p-2 rounded d-flex align-items-center gap-2">
+                            <div style="font-weight: 500;">R$ {{ "%.2f"|format(saldo_patrimonio or 0) }}</div>
+                        </a>
+                        <a href="{{ url_for('financeiro_bp.capital_social') }}" 
+                            class="bg-primary-subtle text-primary-emphasis p-2 rounded d-flex align-items-center gap-2 text-decoration-none cash-link">
                             <i class="bi bi-cash-coin text-primary fs-4"></i>
                             <div style="font-weight: 500;">R$ {{ "%.2f"|format(saldo_caixa or 0) }}</div>
-                        </div>
+                        </a>
                     </div>
                 </ul>
             </div>

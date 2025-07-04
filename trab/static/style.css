@@ -33,3 +33,13 @@ main {
     font-size: 0.875rem;
     border-top: 1px solid #dee2e6;
 }
+
+.cash-link {
+    transition: all 0.4s ease-in-out;
+}
+
+.cash-link:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
