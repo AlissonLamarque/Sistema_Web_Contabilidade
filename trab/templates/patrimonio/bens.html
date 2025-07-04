@@ -26,6 +26,11 @@
                             <span class="fw-bold text-primary">R$ {{ "%.2f"|format(bem.valor) }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
+                            <span class="fw-bold">{{ 'À Vista' if bem.forma_pagamento == 'vista' else 'A Prazo'
+                                }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-calendar-check me-2"></i>Data da Compra</span>
                             <span class="fw-bold">{{ bem.data_compra.strftime('%d/%m/%Y') }}</span>
                         </li>
@@ -69,6 +74,11 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-currency-dollar me-2"></i>Valor de Aquisição</span>
                             <span class="fw-bold text-primary">R$ {{ "%.2f"|format(bem.valor) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
+                            <span class="fw-bold">{{ 'À Vista' if bem.forma_pagamento == 'vista' else 'A Prazo'
+                                }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-calendar-check me-2"></i>Data da Compra</span>

@@ -60,8 +60,9 @@ def cadastrar_venda():
                 valor_total_calculado += quantidade * float(preco_str)
 
             forma_de_pagamento = form.forma_pagamento.data
-            status_pagamento_final = 'Pendente'
-            if forma_de_pagamento != 'A Prazo':
+            if forma_de_pagamento == 'prazo':
+                status_pagamento_final = 'Pendente'
+            else:
                 status_pagamento_final = 'Pago'
 
             nova_venda = Venda(

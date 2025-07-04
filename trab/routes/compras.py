@@ -62,7 +62,10 @@ def cadastrar_compra():
                     flash(f'Saldo em caixa (R$ {saldo_caixa:.2f}) é insuficiente para esta compra de R$ {valor_total_calculado:.2f}.', 'danger')
                     return render_template('compra/cadastrar_compra.html', form=form, produtos=produtos)
             
-            status_pagamento_final = 'Pago' if forma_de_pagamento != 'A Prazo' else 'Pendente'
+            if forma_de_pagamento == 'prazo':
+                status_pagamento_final = 'Pendente'
+            else:
+                status_pagamento_final = 'Pago'
 
             nova_compra = Compra(
                 fornecedor_id=form.fornecedor_id.data,

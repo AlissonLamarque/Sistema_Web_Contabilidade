@@ -28,7 +28,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
-                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo'
+                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'avista' else 'A Prazo'
                                 }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -44,7 +44,7 @@
                 </div>
                 <div class="card-footer bg-transparent">
                     <div class="d-flex justify-content-end">
-                        {% if compra.status_pagamento == 'pendente' %}
+                        {% if compra.status_pagamento == 'Pendente' %}
                         <form action="{{ url_for('compras_bp.pagar_compra', compra_id=compra.id) }}" method="POST"
                             class="d-inline">
                             <button type="submit" class="btn btn-sm btn-outline-success me-2"
@@ -156,7 +156,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
-                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo'
+                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'avista' else 'A Prazo'
                                 }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
