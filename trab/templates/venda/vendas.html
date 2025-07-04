@@ -8,7 +8,8 @@
         </a>
     </div>
 
-    <hr class="my-5"> <h3 class="mb-3">Vendas Confirmadas</h3>
+    <hr class="my-5">
+    <h3 class="mb-3">Vendas Confirmadas</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for venda in vendas_confirmadas %}
         <div class="col">
@@ -34,7 +35,8 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-cash-stack me-2"></i>Lucro</span>
                             <span class="fw-bold text-success">
-                                R$ {{ "%.2f"|format(venda.valor_total - (venda.itens|sum(attribute='custo_total') + (venda.valor_total * 0.18))) }}
+                                R$ {{ "%.2f"|format(venda.valor_total - (venda.itens|sum(attribute='custo_total') +
+                                (venda.valor_total * 0.18))) }}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -45,11 +47,12 @@
                 </div>
                 <div class="card-footer bg-transparent">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
-                                data-bs-toggle="modal" data-bs-target="#detalhesVenda{{ venda.id }}">
+                        <button type="button" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                            data-bs-target="#detalhesVenda{{ venda.id }}">
                             <i class="bi bi-eye"></i> Detalhes
                         </button>
-                        <form action="{{ url_for('vendas_bp.cancelar_venda', venda_id=venda.id) }}" method="POST" style="display: inline;">
+                        <form action="{{ url_for('vendas_bp.cancelar_venda', venda_id=venda.id) }}" method="POST"
+                            style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi-x-circle"></i> Cancelar
                             </button>
@@ -73,12 +76,12 @@
                                 <strong>CPF:</strong> {{ venda.cliente.cpf if venda.cliente else 'N/A' }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Forma de Pagamento:</strong> 
+                                <strong>Forma de Pagamento:</strong>
                                 {{ 'À Vista' if venda.forma_pagamento == 'vista' else 'A Prazo' }}<br>
                                 <strong>Data:</strong> {{ venda.data_venda.strftime('%d/%m/%Y') }}
                             </div>
                         </div>
-                        
+
                         <h6 class="mt-4 mb-3">Itens da Venda</h6>
                         <div class="table-responsive">
                             <table class="table table-sm">
@@ -102,10 +105,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div class="row mt-4">
                             <div class="col-md-6">
-                                <strong>Status:</strong> 
+                                <strong>Status:</strong>
                                 <span class="badge bg-{{ 'success' if venda.status == 'confirmada' else 'secondary' }}">
                                     {{ venda.status }}
                                 </span>
@@ -130,7 +133,8 @@
         {% endfor %}
     </div>
 
-    <hr class="my-5"> <h3 class="mb-3">Vendas Canceladas</h3>
+    <hr class="my-5">
+    <h3 class="mb-3">Vendas Canceladas</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for venda in vendas_canceladas %}
         <div class="col">
@@ -156,22 +160,33 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-cash-stack me-2"></i>Lucro</span>
                             <span class="fw-bold text-success">
-                                R$ {{ "%.2f"|format(venda.valor_total - (venda.itens|sum(attribute='custo_total') + (venda.valor_total * 0.18))) }}
+                                R$ {{ "%.2f"|format(venda.valor_total - (venda.itens|sum(attribute='custo_total') +
+                                (venda.valor_total * 0.18))) }}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-circle me-2"></i>Status</span>
-                            <span class="fw-bold">{{ venda.status }}</span>
+                            <span class="fw-bold">{{ venda.status_pagamento }}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="card-footer bg-transparent">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
-                                data-bs-toggle="modal" data-bs-target="#detalhesVenda{{ venda.id }}">
+                        {% if venda.status_pagamento == 'pendente' %}
+                        <form action="{{ url_for('vendas_bp.receber_venda', venda_id=venda.id) }}" method="POST"
+                            class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-success me-2"
+                                onclick="return confirm('Confirmar o recebimento desta venda?')">
+                                <i class="bi bi-check-circle-fill"></i> Quitar
+                            </button>
+                        </form>
+                        {% endif %}
+                        <button type="button" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                            data-bs-target="#detalhesVenda{{ venda.id }}">
                             <i class="bi bi-eye"></i> Detalhes
                         </button>
-                        <form action="{{ url_for('vendas_bp.excluir_venda', venda_id=venda.id) }}" method="POST" style="display: inline;">
+                        <form action="{{ url_for('vendas_bp.excluir_venda', venda_id=venda.id) }}" method="POST"
+                            style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi-x-circle"></i> Excluir
                             </button>
@@ -195,12 +210,12 @@
                                 <strong>CPF:</strong> {{ venda.cliente.cpf if venda.cliente else 'N/A' }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Forma de Pagamento:</strong> 
+                                <strong>Forma de Pagamento:</strong>
                                 {{ 'À Vista' if venda.forma_pagamento == 'vista' else 'A Prazo' }}<br>
                                 <strong>Data:</strong> {{ venda.data_venda.strftime('%d/%m/%Y') }}
                             </div>
                         </div>
-                        
+
                         <h6 class="mt-4 mb-3">Itens da Venda</h6>
                         <div class="table-responsive">
                             <table class="table table-sm">
@@ -224,10 +239,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div class="row mt-4">
                             <div class="col-md-6">
-                                <strong>Status:</strong> 
+                                <strong>Status:</strong>
                                 <span class="badge bg-{{ 'success' if venda.status == 'confirmada' else 'secondary' }}">
                                     {{ venda.status }}
                                 </span>
@@ -258,16 +273,19 @@
         transition: transform 0.2s;
         border-left: 4px solid var(--border-color);
     }
+
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
+
     .list-group-item {
         border-left: 0;
         border-right: 0;
     }
+
     .card-header {
-        border-bottom: 2px solid rgba(0,0,0,0.1);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     }
 </style>
 {% endblock %}

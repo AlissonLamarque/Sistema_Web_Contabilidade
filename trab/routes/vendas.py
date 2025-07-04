@@ -49,14 +49,13 @@ def cadastrar_venda():
 
             forma_de_pagamento = form.forma_pagamento.data
         
-            if forma_de_pagamento != 'A Prazo':
+            if forma_de_pagamento != 'prazo':
                 status_pagamento = 'pago'
 
             nova_venda = Venda(
                 cliente_id=form.cliente_id.data,
                 forma_pagamento=form.forma_pagamento.data,
                 data_venda=form.data_venda.data,
-                status_pagamento=status_pagamento,
                 valor_total=0.0,
             )
             db.session.add(nova_venda)
@@ -107,7 +106,6 @@ def cadastrar_venda():
         except Exception as e:
             db.session.rollback()
             flash(f'Erro ao registrar venda: {str(e)}', 'danger')
-            vendas_bp.logger.error(f"Erro em cadastrar_venda: {str(e)}", exc_info=True)
     
     return render_template('venda/cadastrar_venda.html', form=form, produtos=produtos)
 
@@ -148,5 +146,22 @@ def excluir_venda(venda_id):
     except Exception as e:
         db.session.rollback()
         flash(f'Erro ao excluir venda: {str(e)}', 'danger')
+    
+    return redirect(url_for('vendas_bp.vendas'))
+
+@vendas_bp.route('/receber_venda/<int:venda_id>', methods=['POST'])
+def receber_venda(venda_id):
+    venda = Venda.query.get_or_404(venda_id)
+    
+    if venda.status_pagamento == 'pendente':
+        try:
+            venda.status_pagamento = 'pago'
+
+            db.session.commit()
+            flash('Venda marcada como recebida com sucesso!', 'success')
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao marcar venda como recebida: {str(e)}', 'danger')
     
     return redirect(url_for('vendas_bp.vendas'))

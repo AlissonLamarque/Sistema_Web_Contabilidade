@@ -8,7 +8,8 @@
         </a>
     </div>
 
-    <hr class="my-5"> <h3 class="mb-3">Compras Confirmadas</h3>
+    <hr class="my-5">
+    <h3 class="mb-3">Compras Confirmadas</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for compra in compras_confirmadas %}
         <div class="col">
@@ -27,25 +28,37 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
-                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo' }}</span>
+                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo'
+                                }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-currency-dollar me-2"></i>Custo</span>
-                            <span class="fw-bold text-danger">R$ {{ "%.2f"|format(compra.valor_total + (compra.valor_total * 0.17)) }}</span>
+                            <span class="fw-bold text-danger">R$ {{ "%.2f"|format(compra.valor_total +
+                                (compra.valor_total * 0.17)) }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-circle me-2"></i>Status</span>
-                            <span class="fw-bold">{{ compra.status }}</span>
+                            <span class="fw-bold">{{ compra.status_pagamento }}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="card-footer bg-transparent">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
-                                data-bs-toggle="modal" data-bs-target="#detalhesCompra{{ compra.id }}">
+                        {% if compra.status_pagamento == 'pendente' %}
+                        <form action="{{ url_for('compras_bp.pagar_compra', compra_id=compra.id) }}" method="POST"
+                            class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-success me-2"
+                                onclick="return confirm('Confirmar o pagamento desta compra?')">
+                                <i class="bi bi-check-circle-fill"></i> Quitar
+                            </button>
+                        </form>
+                        {% endif %}
+                        <button type="button" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                            data-bs-target="#detalhesCompra{{ compra.id }}">
                             <i class="bi bi-eye"></i> Detalhes
                         </button>
-                        <form action="{{ url_for('compras_bp.cancelar_compra', compra_id=compra.id) }}" method="POST" style="display: inline;">
+                        <form action="{{ url_for('compras_bp.cancelar_compra', compra_id=compra.id) }}" method="POST"
+                            style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi-x-circle"></i> Cancelar
                             </button>
@@ -74,7 +87,7 @@
                                 <strong>Data:</strong> {{ compra.data_compra.strftime('%d/%m/%Y') }}
                             </div>
                         </div>
-                        
+
                         <h6 class="mt-4 mb-3">Itens da Compra</h6>
                         <div class="table-responsive">
                             <table class="table table-sm">
@@ -98,11 +111,12 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div class="row mt-4">
                             <div class="col-md-6">
-                                <strong>Status:</strong> 
-                                <span class="badge bg-{{ 'success' if compra.status == 'confirmada' else 'secondary' }}">
+                                <strong>Status:</strong>
+                                <span
+                                    class="badge bg-{{ 'success' if compra.status == 'confirmada' else 'secondary' }}">
                                     {{ compra.status }}
                                 </span>
                             </div>
@@ -126,7 +140,8 @@
         {% endfor %}
     </div>
 
-    <hr class="my-5"> <h3 class="mb-3">Compras Canceladas</h3>
+    <hr class="my-5">
+    <h3 class="mb-3">Compras Canceladas</h3>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for compra in compras_canceladas %}
         <div class="col">
@@ -141,7 +156,8 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-credit-card me-2"></i>Pagamento</span>
-                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo' }}</span>
+                            <span class="fw-bold">{{ 'À Vista' if compra.forma_pagamento == 'vista' else 'A Prazo'
+                                }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-truck me-2"></i>Fornecedor</span>
@@ -149,7 +165,8 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-currency-dollar me-2"></i>Custo</span>
-                            <span class="fw-bold text-danger">R$ {{ "%.2f"|format(compra.valor_total + (compra.valor_total * 0.17)) }}</span>
+                            <span class="fw-bold text-danger">R$ {{ "%.2f"|format(compra.valor_total +
+                                (compra.valor_total * 0.17)) }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-circle me-2"></i>Status</span>
@@ -159,11 +176,12 @@
                 </div>
                 <div class="card-footer bg-transparent">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm btn-outline-primary me-2" 
-                                data-bs-toggle="modal" data-bs-target="#detalhesCompra{{ compra.id }}">
+                        <button type="button" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                            data-bs-target="#detalhesCompra{{ compra.id }}">
                             <i class="bi bi-eye"></i> Detalhes
                         </button>
-                        <form action="{{ url_for('compras_bp.excluir_compra', compra_id=compra.id) }}" method="POST" style="display: inline;">
+                        <form action="{{ url_for('compras_bp.excluir_compra', compra_id=compra.id) }}" method="POST"
+                            style="display: inline;">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi-x-circle"></i> Excluir
                             </button>
@@ -192,7 +210,7 @@
                                 <strong>Data:</strong> {{ compra.data_compra.strftime('%d/%m/%Y') }}
                             </div>
                         </div>
-                        
+
                         <h6 class="mt-4 mb-3">Itens da Compra</h6>
                         <div class="table-responsive">
                             <table class="table table-sm">
@@ -216,11 +234,12 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <div class="row mt-4">
                             <div class="col-md-6">
-                                <strong>Status:</strong> 
-                                <span class="badge bg-{{ 'success' if compra.status == 'confirmada' else 'secondary' }}">
+                                <strong>Status:</strong>
+                                <span
+                                    class="badge bg-{{ 'success' if compra.status == 'confirmada' else 'secondary' }}">
                                     {{ compra.status }}
                                 </span>
                             </div>
@@ -249,10 +268,12 @@
     .card {
         transition: transform 0.2s;
     }
+
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
+
     .list-group-item {
         border-left: 0;
         border-right: 0;

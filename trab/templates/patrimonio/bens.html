@@ -4,13 +4,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Gestão de Patrimônio</h2>
         <div>
-            <!--patrimonio_bp.comprar_bem-->
-            <a href="{{ url_for('base_bp.index') }}" class="btn btn-success">
+            <a href="{{ url_for('patrimonio_bp.comprar_bem') }}" class="btn btn-success">
                 <i class="bi bi-cart-plus"></i> Comprar Bem
-            </a>
-            <!--patrimonio_bp.cadastrar_bem-->
-            <a href="{{ url_for('patrimonio_bp.cadastrar_bem') }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i> Novo Bem
             </a>
         </div>
     </div>
@@ -28,7 +23,6 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text text-muted">{{ bem.descricao or 'Sem descrição.' }}</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-currency-dollar me-2"></i>Valor de Aquisição</span>
@@ -44,14 +38,16 @@
                         </li>
                     </ul>
                 </div>
-                <div class="card-footer bg-transparent border-top-0 pt-0">
-                    <div class="d-flex justify-content-end">
-                        <a href="{{ url_for('patrimonio_bp.cadastrar_bem', bem_id=bem.id) }}" 
-                           class="btn btn-sm btn-outline-primary me-2">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
+                <!--
+                    <div class="card-footer bg-transparent border-top-0 pt-0">
+                        <div class="d-flex justify-content-end">
+                            <a
+                               class="btn btn-sm btn-outline-primary me-2">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                        </div>
                     </div>
-                </div>
+                -->
             </div>
         </div>
         {% else %}
@@ -76,7 +72,6 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text text-muted">{{ bem.descricao or 'Sem descrição.' }}</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-currency-dollar me-2"></i>Valor de Aquisição</span>
@@ -92,14 +87,16 @@
                         </li>
                     </ul>
                 </div>
-                <div class="card-footer bg-transparent border-top-0 pt-0">
-                    <div class="d-flex justify-content-end">
-                        <a href="{{ url_for('patrimonio_bp.editar_bem', bem_id=bem.id) }}" 
-                           class="btn btn-sm btn-outline-secondary me-2">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
+                <!--
+                    <div class="card-footer bg-transparent border-top-0 pt-0">
+                        <div class="d-flex justify-content-end">
+                            <a  
+                               class="btn btn-sm btn-outline-secondary me-2">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                        </div>
                     </div>
-                </div>
+                -->
             </div>
         </div>
         {% else %}
@@ -124,7 +121,6 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">{{ bem.descricao or 'Sem descrição.' }}</p>
                      <ul class="list-group list-group-flush">
                         <li class="list-group-item bg-light d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-currency-dollar me-2"></i>Valor de Aquisição</span>

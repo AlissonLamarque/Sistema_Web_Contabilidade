@@ -43,14 +43,13 @@ def cadastrar_compra():
 
             forma_de_pagamento = form.forma_pagamento.data
         
-            if forma_de_pagamento != 'A Prazo':
-                status_pagamento = 'Pago'
+            if forma_de_pagamento != 'prazo':
+                status_pagamento = 'pago'
 
             nova_compra = Compra(
                 fornecedor_id=form.fornecedor_id.data,
                 forma_pagamento=form.forma_pagamento.data,
                 data_compra=form.data_compra.data,
-                status_pagamento = status_pagamento,
                 valor_total=0
             )
             db.session.add(nova_compra)
@@ -90,10 +89,6 @@ def cadastrar_compra():
         except ValueError as e:
             db.session.rollback()
             flash(f'Erro nos valores informados: {str(e)}', 'danger')
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Erro ao registrar compra: {str(e)}', 'danger')
-            compras_bp.logger.error(f"Erro em cadastrar_compra: {str(e)}", exc_info=True)
 
     return render_template('compra/cadastrar_compra.html', form=form, fornecedores=fornecedores, produtos=produtos)
 
@@ -128,4 +123,33 @@ def excluir_compra(compra_id):
         db.session.rollback()
         flash(f'Erro ao excluir compra: {str(e)}', 'danger')
     
+    return redirect(url_for('compras_bp.compras'))
+
+@compras_bp.route('/pagar_compra/<int:compra_id>', methods=['POST'])
+def pagar_compra(compra_id):
+    compra = Compra.query.get_or_404(compra_id)
+
+    if compra.status_pagamento == 'pendente':
+        try:
+            compra.status_pagamento = 'Pago'
+            '''
+            saida_caixa = MovimentacaoFinanceira(
+                data=datetime.utcnow(),
+                descricao=f'Pagamento da compra #{compra.id} (Fornecedor: {compra.fornecedor.nome})',
+                valor=-abs(compra.valor_total),
+                origem=compra 
+            )
+            db.session.add(saida_caixa)
+            '''
+            
+            db.session.commit()
+            flash(f'Pagamento da compra #{compra.id} registrado com sucesso!', 'success')
+        
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Ocorreu um erro ao processar o pagamento: {str(e)}', 'danger')
+    
+    else:
+        flash('Esta compra já estava com o status "Pago".', 'info')
+
     return redirect(url_for('compras_bp.compras'))
