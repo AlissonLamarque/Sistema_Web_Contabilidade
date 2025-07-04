@@ -50,7 +50,7 @@ def cadastrar_venda():
             forma_de_pagamento = form.forma_pagamento.data
         
             if forma_de_pagamento != 'A Prazo':
-                status_pagamento = 'Pago'
+                status_pagamento = 'pago'
 
             nova_venda = Venda(
                 cliente_id=form.cliente_id.data,

@@ -63,7 +63,7 @@ class CompraForm(FlaskForm):
 class VendaForm(FlaskForm):
     cliente_id = SelectField('Cliente', coerce=int, validators=[DataRequired()], choices=[])
     forma_pagamento = SelectField('Forma de Pagamento',
-                                choices=[('vista', 'À Vista'), ('prazo', 'A Prazo')],
+                                choices=[('avista', 'À Vista'), ('prazo', 'A Prazo')],
                                 validators=[DataRequired()])
     data_venda = StringField('Data da Venda', validators=[DataRequired()])
     submit = SubmitField('Cadastrar Venda')
