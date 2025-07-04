@@ -110,7 +110,7 @@ class MovimentacaoFinanceira(db.Model):
     data = db.Column(db.DateTime, nullable=False)
     descricao = db.Column(db.String(200), nullable=False)
     valor = db.Column(db.Float, nullable=False)
-    origem_tipo = db.Column(db.String(50), nullable=False)
-    origem_id = db.Column(db.Integer, nullable=False)
+    origem_tipo = db.Column(db.String(50), nullable=True)
+    origem_id = db.Column(db.Integer, nullable=True)
 
     origem = generic_relationship(origem_tipo, origem_id)
