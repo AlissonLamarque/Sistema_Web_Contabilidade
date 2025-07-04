@@ -11,10 +11,10 @@ def vendas():
     ]
     
     vendas_confirmadas = Venda.query.options(*options)\
-        .filter_by(status='confirmada')\
+        .filter_by(status='Confirmada')\
         .order_by(Venda.data_venda.desc()).all()
     vendas_canceladas = Venda.query.options(*options)\
-        .filter_by(status='cancelada')\
+        .filter_by(status='Cancelada')\
         .order_by(Venda.data_venda.desc()).all()
     
     for venda in vendas_confirmadas:
@@ -50,7 +50,7 @@ def cadastrar_venda():
             forma_de_pagamento = form.forma_pagamento.data
         
             if forma_de_pagamento != 'prazo':
-                status_pagamento = 'pago'
+                status_pagamento = 'Pago'
 
             nova_venda = Venda(
                 cliente_id=form.cliente_id.data,
@@ -119,7 +119,7 @@ def cancelar_venda(venda_id):
             produto.estoque += item.quantidade
             produto.status = 'disponível' if produto.estoque > 0 else 'indisponível'
         
-        venda.status = 'cancelada'
+        venda.status = 'Cancelada'
         db.session.commit()
         
         flash('Venda cancelada com sucesso!', 'success')
@@ -153,9 +153,9 @@ def excluir_venda(venda_id):
 def receber_venda(venda_id):
     venda = Venda.query.get_or_404(venda_id)
     
-    if venda.status_pagamento == 'pendente':
+    if venda.status_pagamento == 'Pendente':
         try:
-            venda.status_pagamento = 'pago'
+            venda.status_pagamento = 'Pago'
 
             db.session.commit()
             flash('Venda marcada como recebida com sucesso!', 'success')

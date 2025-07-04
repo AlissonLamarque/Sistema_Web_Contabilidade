@@ -11,10 +11,10 @@ def compras():
     ]
     
     compras_confirmadas = Compra.query.options(*options)\
-        .filter_by(status='confirmada')\
+        .filter_by(status='Confirmada')\
         .order_by(Compra.data_compra.desc()).all()
     compras_canceladas = Compra.query.options(*options)\
-        .filter_by(status='cancelada')\
+        .filter_by(status='Cancelada')\
         .order_by(Compra.data_compra.desc()).all()
     
     for compra in compras_confirmadas:
@@ -44,7 +44,7 @@ def cadastrar_compra():
             forma_de_pagamento = form.forma_pagamento.data
         
             if forma_de_pagamento != 'prazo':
-                status_pagamento = 'pago'
+                status_pagamento = 'Pago'
 
             nova_compra = Compra(
                 fornecedor_id=form.fornecedor_id.data,
@@ -102,7 +102,7 @@ def cancelar_compra(compra_id):
             produto.estoque -= item.quantidade
             produto.status = 'disponível' if produto.estoque > 0 else 'indisponível'
         
-        compra.status = 'cancelada'
+        compra.status = 'Cancelada'
         db.session.commit()
         flash('Compra cancelada com sucesso!', 'success')
     except Exception as e:
@@ -129,7 +129,7 @@ def excluir_compra(compra_id):
 def pagar_compra(compra_id):
     compra = Compra.query.get_or_404(compra_id)
 
-    if compra.status_pagamento == 'pendente':
+    if compra.status_pagamento == 'Pendente':
         try:
             compra.status_pagamento = 'Pago'
             '''

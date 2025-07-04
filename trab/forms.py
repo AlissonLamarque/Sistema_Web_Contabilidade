@@ -54,7 +54,7 @@ class EditarFornecedorForm(FornecedorForm):
 class CompraForm(FlaskForm):
     fornecedor_id = SelectField('Fornecedor', coerce=int, validators=[DataRequired()], choices=[])
     forma_pagamento = SelectField('Forma de Pagamento',
-                                choices=[('vista', 'À Vista'), ('prazo', 'A Prazo')],
+                                choices=[('avista', 'À Vista'), ('prazo', 'A Prazo')],
                                 validators=[DataRequired()])
     data_compra = DateField('Data da Compra', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Cadastrar Compra')
@@ -70,34 +70,15 @@ class VendaForm(FlaskForm):
 
 # Forms de Patrimônio e Movimentação Financeira
 
-## Define o formulário para cadastro de bem patrimonial
-class PatrimonioForm(FlaskForm):
-    nome = StringField('Nome', validators=[DataRequired()])
-    descricao = TextAreaField('Descrição')
-    valor = FloatField('Valor', validators=[DataRequired(), NumberRange(min=0.01)])
-    data_aquisicao = DateField('Data de Aquisição', format='%Y-%m-%d', validators=[DataRequired()])
-    status = SelectField('Status', choices=[('ativo', 'Ativo'), ('manutencao', 'Em Manutenção'), ('vendido', 'Vendido')])
-    submit = SubmitField('Cadastrar Bem')
-
-## Define o formulário para edição de bem patrimonial
-class EditarPatrimonioForm(PatrimonioForm):
-    status = SelectField('Status', 
-                       choices=[('ativo', 'Ativo'), ('manutencao', 'Em Manutenção'), ('vendido', 'Vendido')],
-                       validators=[DataRequired()])
-    submit = SubmitField('Salvar Alterações')
-
 ## Define o formulário para compra de bem patrimonial
 class CompraPatrimonioForm(FlaskForm):
-    patrimonio_id = SelectField('Bem Patrimonial', coerce=int, validators=[DataRequired()], choices=[])
-    fornecedor_id = SelectField('Fornecedor', coerce=int, validators=[DataRequired()], choices=[])
+    nome = StringField('Nome', validators=[DataRequired()])
+    descricao = TextAreaField('Descrição')
     data_compra = DateField('Data da Compra', format='%Y-%m-%d', validators=[DataRequired()])
     valor = FloatField('Valor', validators=[DataRequired(), NumberRange(min=0.01)])
     forma_pagamento = SelectField('Forma de Pagamento',
-                                choices=[('vista', 'À Vista'), ('prazo', 'A Prazo')],
+                                choices=[('avista', 'À Vista'), ('prazo', 'A Prazo')],
                                 validators=[DataRequired()])
-    status = SelectField('Status', 
-                       choices=[('confirmada', 'Confirmada'), ('cancelada', 'Cancelada')],
-                       validators=[DataRequired()])
     submit = SubmitField('Registrar Compra de Patrimônio')
 
 ## Define o formulário para ação de inserir o capital inicial

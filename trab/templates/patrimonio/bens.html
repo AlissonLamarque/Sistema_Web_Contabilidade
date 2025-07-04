@@ -30,7 +30,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-calendar-check me-2"></i>Data de Aquisição</span>
-                            <span class="fw-bold">{{ bem.data_aquisicao.strftime('%d/%m/%Y') }}</span>
+                            <span class="fw-bold">{{ bem.data_compra.strftime('%d/%m/%Y') }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-info-circle me-2"></i>Status</span>
@@ -52,97 +52,12 @@
         </div>
         {% else %}
         <div class="col-12">
-            <div class="alert alert-light text-center">
-                <i class="bi bi-info-circle me-2"></i>Nenhum bem ativo encontrado.
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle-fill me-2"></i>Nenhum bem ativo encontrado.
             </div>
         </div>
         {% endfor %}
     </div>
-
-    <hr class="my-4">
-    <h3 class="mb-3">Bens em Manutenção</h3>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for bem in bens_manutencao %}
-        <div class="col">
-            <div class="card h-100 shadow-sm card-maintenance">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-gem me-2"></i>
-                        {{ bem.nome }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-currency-dollar me-2"></i>Valor de Aquisição</span>
-                            <span class="fw-bold text-primary">R$ {{ "%.2f"|format(bem.valor) }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-calendar-check me-2"></i>Data de Aquisição</span>
-                            <span class="fw-bold">{{ bem.data_aquisicao.strftime('%d/%m/%Y') }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-info-circle me-2"></i>Status</span>
-                            <span class="badge bg-warning text-dark">{{ bem.status|capitalize }}</span>
-                        </li>
-                    </ul>
-                </div>
-                <!--
-                    <div class="card-footer bg-transparent border-top-0 pt-0">
-                        <div class="d-flex justify-content-end">
-                            <a  
-                               class="btn btn-sm btn-outline-secondary me-2">
-                                <i class="bi bi-pencil"></i> Editar
-                            </a>
-                        </div>
-                    </div>
-                -->
-            </div>
-        </div>
-        {% else %}
-        <div class="col-12">
-            <div class="alert alert-light text-center">
-                <i class="bi bi-info-circle me-2"></i>Nenhum bem em manutenção.
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <hr class="my-4">
-    <h3 class="mb-3">Bens Vendidos</h3>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for bem in bens_vendidos %}
-        <div class="col">
-            <div class="card h-100 shadow-sm bg-light text-muted">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-gem me-2"></i>
-                        {{ bem.nome }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item bg-light d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-currency-dollar me-2"></i>Valor de Aquisição</span>
-                            <span class="fw-bold">R$ {{ "%.2f"|format(bem.valor) }}</span>
-                        </li>
-                        <li class="list-group-item bg-light d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-info-circle me-2"></i>Status</span>
-                            <span class="badge bg-danger">{{ bem.status|capitalize }}</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="col-12">
-            <div class="alert alert-light text-center">
-                <i class="bi bi-info-circle me-2"></i>Nenhum bem vendido.
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
 
 <style>
     .card {

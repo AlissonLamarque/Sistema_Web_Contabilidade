@@ -39,7 +39,6 @@ class Fornecedor(db.Model):
     status = db.Column(db.String(10), nullable=False, default='ativo')
 
     compras_produtos = db.relationship('Compra', backref='fornecedor', lazy=True)
-    compras_patrimonio = db.relationship('CompraPatrimonio', backref='fornecedor_patrimonio', lazy=True)
 
 # MODELS DE COMPRAS E VENDAS
 
@@ -50,8 +49,8 @@ class Compra(db.Model):
     forma_pagamento = db.Column(db.String(50), nullable=False)
     data_compra = db.Column(db.DateTime, nullable=False)
     valor_total = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(20), default='confirmada')
-    status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
+    status = db.Column(db.String(20), default='Confirmada')
+    status_pagamento = db.Column(db.String(50), default='Pendente', nullable=False)
 
     itens = db.relationship('ItemCompra', backref='compra', lazy=True, cascade="all, delete-orphan")
     movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
@@ -73,8 +72,8 @@ class Venda(db.Model):
     forma_pagamento = db.Column(db.String(50), nullable=False)
     data_venda = db.Column(db.DateTime, nullable=False)
     valor_total = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(20), default='confirmada')
-    status_pagamento = db.Column(db.String(50), default='pendente', nullable=False)
+    status = db.Column(db.String(20), default='Confirmada')
+    status_pagamento = db.Column(db.String(50), default='Pendente', nullable=False)
 
     itens = db.relationship('ItemVenda', backref='venda', lazy=True, cascade="all, delete-orphan")
     movimentacoes_financeiras = db.relationship("MovimentacaoFinanceira",
@@ -91,24 +90,13 @@ class ItemVenda(db.Model):
 
 # MODELS DE PATRIMÔNIO E MOVIMENTAÇÃO FINANCEIRA
 
-## Define o modelo de patrimônio, que representa bens da empresa
-class Patrimonio(db.Model):
+## Define o modelo de compra de patrimônio
+class CompraPatrimonio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     descricao = db.Column(db.String(200), nullable=True)
-    valor = db.Column(db.Float, nullable=False)
-    data_aquisicao = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.String(20), default='ativo', nullable=False)
-
-    compras = db.relationship('CompraPatrimonio', backref='patrimonio', lazy=True)
-
-## Define o modelo de compra de patrimônio, que relaciona fornecedores com bens patrimoniais
-class CompraPatrimonio(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    patrimonio_id = db.Column(db.Integer, db.ForeignKey('patrimonio.id'), nullable=False)
-    fornecedor_id = db.Column(db.Integer, db.ForeignKey('fornecedor.id'), nullable=False)
     data_compra = db.Column(db.DateTime, nullable=False)
-    valor_total = db.Column(db.Float, nullable=False)
+    valor = db.Column(db.Float, nullable=False)
     forma_pagamento = db.Column(db.String(50), nullable=False)
     status_pagamento = db.Column(db.String(50), default='Pendente', nullable=False)
 
