@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, flash, Blueprint
-from forms import FornecedorForm
+from forms import FornecedorForm, EditarFornecedorForm
 from models import db, Fornecedor
 
 fornecedores_bp = Blueprint('fornecedores_bp', __name__, template_folder='templates', static_folder='static')
@@ -31,7 +31,7 @@ def cadastrar_fornecedor():
 @fornecedores_bp.route('/editar_fornecedor/<int:fornecedor_id>', methods=['GET', 'POST'])
 def editar_fornecedor(fornecedor_id):
     fornecedor = Fornecedor.query.get_or_404(fornecedor_id)
-    form = FornecedorForm(obj=fornecedor)
+    form = EditarFornecedorForm(obj=fornecedor)
     if form.validate_on_submit():
         fornecedor.nome = form.nome.data
         fornecedor.cnpj = form.cnpj.data

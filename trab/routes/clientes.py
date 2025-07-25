@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, flash, Blueprint
-from forms import ClienteForm
+from forms import ClienteForm, EditarClienteForm
 from models import db, Cliente
 
 clientes_bp = Blueprint('clientes_bp', __name__, template_folder='templates', static_folder='static')
@@ -31,7 +31,7 @@ def cadastrar_cliente():
 @clientes_bp.route('/editar_cliente/<int:cliente_id>', methods=['GET', 'POST'])
 def editar_cliente(cliente_id):
     cliente = Cliente.query.get_or_404(cliente_id)
-    form = ClienteForm(obj=cliente)
+    form = EditarClienteForm(obj=cliente)
     if form.validate_on_submit():
         cliente.nome = form.nome.data
         cliente.cpf = form.cpf.data

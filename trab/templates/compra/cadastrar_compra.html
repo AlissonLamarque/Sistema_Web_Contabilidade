@@ -30,11 +30,11 @@
                 {% endif %}
             </div>
             <div class="col-md-6">
-                {{ form.nf_entrada.label(class="form-label") }}
-                {{ form.nf_entrada(class="form-control") }}
-                {% if form.nf_entrada.errors %}
+                {{ form.forma_pagamento.label(class="form-label") }}
+                {{ form.forma_pagamento(class="form-control") }}
+                {% if form.forma_pagamento.errors %}
                     <div class="invalid-feedback d-block">
-                        {{ form.nf_entrada.errors[0] }}
+                        {{ form.forma_pagamento.errors[0] }}
                     </div>
                 {% endif %}
             </div>

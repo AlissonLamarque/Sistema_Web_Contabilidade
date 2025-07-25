@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, flash, Blueprint
-from forms import ProdutoForm
+from forms import ProdutoForm, EditarProdutoForm
 from models import db, Produto
 
 produtos_bp = Blueprint('produtos_bp', __name__, template_folder='templates', static_folder='static')
@@ -30,7 +30,7 @@ def cadastrar_produto():
 @produtos_bp.route('/editar_produto/<int:produto_id>', methods=['GET', 'POST'])
 def editar_produto(produto_id):
     produto = Produto.query.get_or_404(produto_id)
-    form = ProdutoForm(obj=produto)
+    form = EditarProdutoForm(obj=produto)
     if form.validate_on_submit():
         produto.nome = form.nome.data
         produto.preco_compra = form.preco_compra.data
